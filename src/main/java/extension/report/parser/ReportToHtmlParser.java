@@ -6,7 +6,7 @@ import test.TestMethodData;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class ReportToHtmlParser {
+public class ReportToHtmlParser implements ReportParser {
 
     public String parse(ReportBuilder report) {
         return "<div>" + formatPageTitle(report.getClassPath()) + "</div>" +

@@ -1,6 +1,7 @@
 package extension.report;
 
 import extension.report.builder.ReportBuilder;
+import extension.report.parser.ReportParser;
 import extension.report.parser.ReportToHtmlParser;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
@@ -15,7 +16,7 @@ import static org.mockito.Mockito.when;
 
 public class ReportGeneratorTest {
 
-    private final ReportToHtmlParser parser = new ReportToHtmlParser();
+    private final ReportParser parser = mock(ReportParser.class);
     private final ReportGenerator testClass = new ReportGenerator(parser);
 
     @AfterAll

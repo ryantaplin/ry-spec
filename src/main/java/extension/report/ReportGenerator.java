@@ -1,6 +1,7 @@
 package extension.report;
 
 import extension.report.builder.ReportBuilder;
+import extension.report.parser.ReportParser;
 import extension.report.parser.ReportToHtmlParser;
 
 import java.io.File;
@@ -13,16 +14,16 @@ public class ReportGenerator {
     private static final String BASE_REPORT_LOCATION = "target";
     private static final String DEFAULT_REPORTS_LOCATION = "reports";
 
-    private final ReportToHtmlParser reportToHtmlParser;
+    private final ReportParser reportParser;
 
-    public ReportGenerator(ReportToHtmlParser reportToHtmlParser) {
-        this.reportToHtmlParser = reportToHtmlParser;
+    public ReportGenerator(ReportParser reportParser) {
+        this.reportParser = reportParser;
     }
 
     public void generate(ReportBuilder report) {
         File file = createFileIfNotPresent(String.format("%s/%s/%s.html", BASE_REPORT_LOCATION, getReportsLocation(), report.getClassPath()));
         try (FileWriter fileWriter = new FileWriter(file)) {
-            fileWriter.write(reportToHtmlParser.parse(report));
+            fileWriter.write(reportParser.parse(report));
         } catch (IOException e) {
             e.printStackTrace(); //TODO: better exception handling
         }
