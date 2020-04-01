@@ -1,39 +1,46 @@
 package extension.report.parser;
 
 import extension.report.builder.ReportBuilder;
+import extension.report.parser.html.HtmlValue;
 import test.TestMethodData;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static extension.report.parser.html.HtmlContent.content;
+import static extension.report.parser.html.HtmlTemplateBuilder.htmlTemplate;
+import static extension.report.parser.html.element.DivElement.div;
+
 public class ReportToHtmlParser implements ReportParser {
 
     public String parse(ReportBuilder report) {
-        return "<div>" + formatPageTitle(report.getClassPath()) + "</div>" +
-                "<div>" + formatPageIndex(report.getTestMethodData()) + "</div>" +
-                "<div>" + formatTestContent(report.getTestMethodData()) + "</div>";
+        HtmlValue pageTitle = formatPageTitle(report.getClassPath());
+        return htmlTemplate()
+                .withTitle(pageTitle.asString())
+                .withElement(div(pageTitle))
+                .withElement(div(formatTestContent(report.getTestMethodData())))
+                .build();
     }
 
-    private String formatTestContent(List<TestMethodData> testMethodData) {
-        return "<div>" + testMethodData.stream().map(this::testBox).collect(Collectors.joining()) + "</div>";
+    private HtmlValue formatTestContent(List<TestMethodData> testMethodData) {
+        return div(
+                content(
+                        testMethodData.stream()
+                                .map(e -> testBox(e).asString())
+                                .collect(Collectors.joining())
+                ));
     }
 
-    private String testBox(TestMethodData t) {
-        return "<div>" +
-                    "<div>" + t.getName() + " : " + t.getResult().toString() + "</div>" +
-                    "<div>" + t.getSourceCode().asString() + "</div>" +
-                "</div>";
+    private HtmlValue testBox(TestMethodData t) {
+        return div(
+                div(content(t.getName() + " : " + t.getResult().toString())),
+                div(content(t.getSourceCode().asString()))
+        );
     }
 
-    private String formatPageIndex(List<TestMethodData> testMethodData) {
-        return "<ul>" +
-                testMethodData.stream().map(t -> String.format("<li>%s</li>", t.getName())).collect(Collectors.joining()) +
-                "</ul>";
-    }
-
-    public String formatPageTitle(String title) {
+    private HtmlValue formatPageTitle(String title) {
         String[] split = title.split("/");
-        return String.format("%s", split[split.length - 1]);
+        return content(String.format("%s", split[split.length - 1]));
     }
 
 }
