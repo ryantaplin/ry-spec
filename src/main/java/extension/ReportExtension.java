@@ -3,6 +3,8 @@ package extension;
 import extension.report.ReportGenerator;
 import extension.report.builder.ReportBuilder;
 import extension.report.parser.ReportToHtmlParser;
+import extension.report.parser.helper.CamelCaseParser;
+import extension.report.parser.helper.SourceCodeParser;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.*;
 import test.*;
@@ -17,7 +19,7 @@ import static test.TestResult.PASSED;
 
 public class ReportExtension implements Extension, BeforeAllCallback, AfterEachCallback, AfterAllCallback {
 
-    private final ReportToHtmlParser reportParser = new ReportToHtmlParser();
+    private final ReportToHtmlParser reportParser = new ReportToHtmlParser(new CamelCaseParser(), new SourceCodeParser());
     private final ReportGenerator reportGenerator = new ReportGenerator(reportParser);
 
     private ReportBuilder reportBuilder;

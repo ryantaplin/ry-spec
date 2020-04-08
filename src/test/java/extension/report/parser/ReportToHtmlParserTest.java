@@ -1,8 +1,11 @@
 package extension.report.parser;
 
 import extension.report.builder.ReportBuilder;
+import extension.report.parser.helper.CamelCaseParser;
+import extension.report.parser.helper.SourceCodeParser;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.stubbing.Answer;
 import test.TestMethodData;
 import test.TestMethodSourceCode;
 import test.TestResult;
@@ -11,18 +14,29 @@ import java.util.List;
 
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 class ReportToHtmlParserTest {
 
+    private final CamelCaseParser ccParser = mock(CamelCaseParser.class);
+    private final SourceCodeParser scParser = mock(SourceCodeParser.class);
+
     private final ReportBuilder reportBuilder = mock(ReportBuilder.class);
-    private final ReportToHtmlParser reportToHtmlParser = new ReportToHtmlParser();
+    private final ReportToHtmlParser reportToHtmlParser = new ReportToHtmlParser(ccParser, scParser);
 
     @BeforeEach
     void setUp() {
         when(reportBuilder.getClassPath()).thenReturn("stubTestClassPath");
         when(reportBuilder.getTestMethodData()).thenReturn(stubTestMethods());
+
+        final Answer<String> withInput = invocation -> {
+            Object[] args = invocation.getArguments();
+            return (String) args[0];
+        };
+        when(ccParser.parse(anyString())).thenAnswer(withInput);
+        when(scParser.parse(anyString())).thenAnswer(withInput);
     }
 
     @Test

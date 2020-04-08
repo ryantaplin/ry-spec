@@ -16,7 +16,7 @@ class HtmlTemplateBuilderTest {
 
     @Test
     void resultContainsHtmlTagsWithLangAttribute() {
-        assertThat(htmlTemplate().build()).contains("<html lang=\"en\">").contains("</html>");
+        assertThat(htmlTemplate().build()).contains("<html lang=\"en\" style=\"height: 98%\">").contains("</html>");
     }
 
     @Test
@@ -37,7 +37,7 @@ class HtmlTemplateBuilderTest {
 
     @Test
     void resultContainsBodyTags() {
-        assertThat(htmlTemplate().build()).contains("<body>").contains("</body>");
+        assertThat(htmlTemplate().build()).contains("<body style=\"border: solid 1px black; height: 100%\">").contains("</body>");
     }
 
     @Test

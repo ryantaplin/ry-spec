@@ -15,7 +15,7 @@ public class HtmlContent implements HtmlValue {
     }
 
     public String asString() {
-        return value;
+        return value.replaceAll("\n", "<br>");
     }
 
     @Override

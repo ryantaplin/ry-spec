@@ -10,24 +10,22 @@ public class CssBuilder {
 
     private CssBuilder() { }
 
-    public static CssBuilder cssBuilder() {
-        return new CssBuilder();
-    }
+    public static CssBuilder css() { return new CssBuilder(); }
 
-    public CssBuilder withBackgroundColour(CssColour colour) {
+    public CssBuilder backgroundColour(CssColour colour) {
         this.cssElements.add(new CssElement("background-color", colour.getHexValue()));
         return this;
     }
 
-    public CssBuilder withFontColour(CssColour colour) {
+    public CssBuilder fontColour(CssColour colour) {
         this.cssElements.add(new CssElement("color", colour.getHexValue()));
         return this;
     }
 
-    @Override
-    public String toString() {
-        return cssElements.stream()
+    public String asString() {
+        if (cssElements.size() <= 0) return "";
+        else return "style=\"" + cssElements.stream()
                 .map(CssElement::getAttributeWithValue)
-                .collect(Collectors.joining("; "));
+                .collect(Collectors.joining("; ")) + "\"";
     }
 }

@@ -1,6 +1,7 @@
 package extension.report.parser.html.css;
 
 public enum CssColour {
+    BLUE("70e1e1"),
     WHITE("FFFFFF"),
     BLACK("000000");
 

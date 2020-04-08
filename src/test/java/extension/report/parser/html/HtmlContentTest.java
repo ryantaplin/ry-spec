@@ -9,6 +9,11 @@ import static org.junit.jupiter.api.Assertions.*;
 class HtmlContentTest {
 
     @Test
+    void replaceAllNewLinesWithHtmlLineBreaks() {
+        assertThat(content("Some\nNewLine\n").asString()).isEqualTo("Some<br>NewLine<br>");
+    }
+
+    @Test
     void htmlContentAsStringReturnsInputValue() {
         assertThat(content("someValue").asString()).isEqualTo("someValue");
     }

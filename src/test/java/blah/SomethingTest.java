@@ -14,8 +14,24 @@ class SomethingTest {
         Assertions.fail();
     }
 
+    public static final String CHICKEN = "";
+
     @Test
     void somethingPass() {
+        doSomething(likeAdd(CHICKEN));
+        andSomethingElse();
         assertThat(true).isTrue();
+    }
+
+    private String likeAdd(String x) {
+        return "";
+    }
+
+    private void andSomethingElse() {
+
+    }
+
+    private void doSomething(String x) {
+
     }
 }
