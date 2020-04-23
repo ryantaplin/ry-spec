@@ -31,12 +31,12 @@ public class HtmlTemplateBuilder {
         StringBuilder sb = new StringBuilder();
 
         sb.append("<!DOCTYPE html>");
-        sb.append("<html lang=\"en\" style=\"height: 98%\">");
+        sb.append("<html lang=\"en\">");
         sb.append("<head>");
         sb.append(String.format("<meta charset=\"%s\"/>", "UTF-8"));
         sb.append(String.format("<title>%s</title>", title));
         sb.append("</head>");
-        sb.append("<body style=\"border: solid 1px black; height: 100%\">");
+        sb.append("<body style=\"margin:0px\">");
         sb.append("<div>");
 
         elements.forEach(element -> sb.append(element.asString()));

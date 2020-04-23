@@ -1,6 +1,14 @@
 package extension.report.parser.helper;
 
+import extension.report.parser.html.css.CssPosition;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -38,33 +46,19 @@ class sourceCodeParserTest {
                 .doesNotContain("somethingFail(String input)");
     }
 
-    @Test
-    void removesCurlyBraces() {
-        assertThat(sourceCodeParser.parse(INPUT_SOURCE_CODE_EXAMPLE_1))
-                .doesNotContain("{").doesNotContain("}");
+    @ParameterizedTest(name = "\"{0}\" should not exist in the formatted output")
+    @MethodSource("inputAndOutputForForbiddenCharacters")
+    void removesForbiddenCharacters(String forbiddenCharacter) {
+        assertThat(sourceCodeParser.parse(sourceCodeWith(forbiddenCharacter)))
+                .doesNotContain(forbiddenCharacter);
     }
 
-    @Test
-    void removesRoundBraces() {
-        assertThat(sourceCodeParser.parse(INPUT_SOURCE_CODE_EXAMPLE_1))
-                .doesNotContain("(").doesNotContain(")");
+    private static Stream<Arguments> inputAndOutputForForbiddenCharacters() {
+        return Stream.of(",", ";", "{", "}", "(", ")", ".", " ", "_").map(Arguments::of);
     }
 
-    @Test
-    void removesSemiColons() {
-        assertThat(sourceCodeParser.parse(INPUT_SOURCE_CODE_EXAMPLE_1))
-                .doesNotContain(";");
-    }
-
-    @Test
-    void removesCommas() {
-        assertThat(sourceCodeParser.parse(INPUT_SOURCE_CODE_EXAMPLE_2))
-                .doesNotContain(",");
-    }
-
-    @Test
-    void removesFullStops() {
-        assertThat(sourceCodeParser.parse(INPUT_SOURCE_CODE_EXAMPLE_1))
-                .doesNotContain(".");
+    private String sourceCodeWith(String forbiddenCharacter) {
+        return String.format("somethingFail(String input) {\n" +
+                "%s;\n", forbiddenCharacter);
     }
 }

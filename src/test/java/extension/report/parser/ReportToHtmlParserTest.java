@@ -4,6 +4,7 @@ import extension.report.builder.ReportBuilder;
 import extension.report.parser.helper.CamelCaseSplitter;
 import extension.report.parser.helper.SentenceFormatter;
 import extension.report.parser.helper.SourceCodeParser;
+import extension.report.parser.html.css.helper.TestContentCssHelper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.stubbing.Answer;
@@ -13,6 +14,7 @@ import extension.test.TestResult;
 
 import java.util.List;
 
+import static extension.report.parser.html.css.CssBuilder.css;
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -21,11 +23,13 @@ import static org.mockito.Mockito.when;
 
 class ReportToHtmlParserTest {
 
+    //TODO: tidy up test; mock out TestSourceCodeToHtmlParser
     private final CamelCaseSplitter ccSplitter = mock(CamelCaseSplitter.class);
     private final SentenceFormatter sFormatter = mock(SentenceFormatter.class);
     private final SourceCodeParser scParser = mock(SourceCodeParser.class);
+    private final TestContentCssHelper testContentCssHelper = mock(TestContentCssHelper.class);
 
-    private final TestSourceCodeToHtmlParser scToHtmlParser = new TestSourceCodeToHtmlParser(scParser, ccSplitter, sFormatter);
+    private final TestSourceCodeToHtmlParser scToHtmlParser = new TestSourceCodeToHtmlParser(scParser, ccSplitter, sFormatter, testContentCssHelper);
 
     private final ReportBuilder reportBuilder = mock(ReportBuilder.class);
     private final ReportToHtmlParser reportToHtmlParser = new ReportToHtmlParser(ccSplitter, scToHtmlParser);
@@ -42,6 +46,9 @@ class ReportToHtmlParserTest {
         when(ccSplitter.split(anyString())).thenAnswer(withInput);
         when(scParser.parse(anyString())).thenAnswer(withInput);
         when(sFormatter.format(anyString())).thenAnswer(withInput);
+        when(testContentCssHelper.bodyCss()).thenReturn(null);
+        when(testContentCssHelper.headerCss()).thenReturn(null);
+        when(testContentCssHelper.containerCss()).thenReturn(null);
     }
 
     @Test

@@ -7,6 +7,7 @@ import extension.report.parser.TestSourceCodeToHtmlParser;
 import extension.report.parser.helper.CamelCaseSplitter;
 import extension.report.parser.helper.SentenceFormatter;
 import extension.report.parser.helper.SourceCodeParser;
+import extension.report.parser.html.css.helper.TestContentCssHelper;
 import extension.test.TestMethodData;
 import extension.test.TestPath;
 import extension.test.TestResult;
@@ -28,8 +29,10 @@ public class ReportExtension implements Extension, BeforeAllCallback, AfterEachC
     private final CamelCaseSplitter camelCaseSplitter = new CamelCaseSplitter();
     private final SourceCodeParser sourceCodeParser = new SourceCodeParser();
     private final SentenceFormatter sentenceFormatter = new SentenceFormatter();
+    private final TestContentCssHelper testContentCssHelper = new TestContentCssHelper();
+
     private final TestSourceCodeToHtmlParser sourceCodeToHtmlParser = new TestSourceCodeToHtmlParser(
-            sourceCodeParser, camelCaseSplitter, sentenceFormatter);
+            sourceCodeParser, camelCaseSplitter, sentenceFormatter, testContentCssHelper);
 
     private final ReportToHtmlParser reportParser = new ReportToHtmlParser(camelCaseSplitter, sourceCodeToHtmlParser);
     private final ReportGenerator reportGenerator = new ReportGenerator(reportParser);

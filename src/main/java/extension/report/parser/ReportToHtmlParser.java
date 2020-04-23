@@ -2,14 +2,9 @@ package extension.report.parser;
 
 import extension.report.builder.ReportBuilder;
 import extension.report.parser.helper.CamelCaseSplitter;
-import extension.report.parser.helper.SentenceFormatter;
-import extension.report.parser.helper.SourceCodeParser;
 import extension.report.parser.html.HtmlValue;
-import extension.test.TestMethodData;
-
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import extension.report.parser.html.css.CssBuilder;
+import extension.report.parser.html.css.CssPosition;
 
 import static extension.report.parser.html.HtmlContent.content;
 import static extension.report.parser.html.HtmlTemplateBuilder.htmlTemplate;
@@ -30,10 +25,18 @@ public class ReportToHtmlParser implements ReportParser {
     public String parse(ReportBuilder report) {
         HtmlValue pageTitle = formatPageTitle(report.getClassPath());
         return htmlTemplate()
-                .withTitle(pageTitle.asString()) //style="border-bottom: solid 1px black; height: 6%"
-                .withElement(div(pageTitle).with(css().backgroundColour(BLUE).fontSize(24)))
+                .withTitle(pageTitle.asString())
+                .withElement(div(div(pageTitle).with(css().margin(0, 2, 0, 2)))
+                        .with(pageTitleCss()))
                 .withElements(testSourceCodeToHtmlParser.parse(report.getTestMethodData()))
                 .build();
+    }
+
+    private CssBuilder pageTitleCss() {
+        return css()
+                .border(1, CssPosition.BOTTOM)
+                .backgroundColour(BLUE)
+                .fontSize(24);
     }
 
     private HtmlValue formatPageTitle(String title) {

@@ -20,7 +20,6 @@ class ReportExtensionExampleTest {
         Assertions.fail();
     }
 
-    //TODO: remove _
     @Test
     void somethingPass() {
         givenWeOwnA(EMPTY_FARM);

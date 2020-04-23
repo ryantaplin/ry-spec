@@ -9,7 +9,7 @@ import static java.util.stream.Collectors.joining;
 
 public class SourceCodeParser {
 
-    private final List<Character> forbiddenCharacters = Arrays.asList(',', ';', '{', '}', '(', ')', '.', ' ');
+    private final List<Character> forbiddenCharacters = Arrays.asList(',', ';', '{', '}', '(', ')', '.', ' ', '_');
 
     public String parse(String input) {
         return Stream.of(removeForbiddenCharacters(input).split("\n"))
