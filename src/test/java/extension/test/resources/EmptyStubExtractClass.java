@@ -1,4 +1,4 @@
-package test.resources;
+package extension.test.resources;
 
 public class EmptyStubExtractClass {
 }

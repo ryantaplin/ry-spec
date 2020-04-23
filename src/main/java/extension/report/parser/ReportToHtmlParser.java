@@ -4,8 +4,7 @@ import extension.report.builder.ReportBuilder;
 import extension.report.parser.helper.CamelCaseParser;
 import extension.report.parser.helper.SourceCodeParser;
 import extension.report.parser.html.HtmlValue;
-import org.mockito.stubbing.Answer;
-import test.TestMethodData;
+import extension.test.TestMethodData;
 
 import java.util.List;
 import java.util.stream.Collectors;

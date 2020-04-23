@@ -6,9 +6,9 @@ import extension.report.parser.helper.SourceCodeParser;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.stubbing.Answer;
-import test.TestMethodData;
-import test.TestMethodSourceCode;
-import test.TestResult;
+import extension.test.TestMethodData;
+import extension.test.TestMethodSourceCode;
+import extension.test.TestResult;
 
 import java.util.List;
 

@@ -1,7 +1,7 @@
 package extension.report.builder;
 
-import test.TestMethodData;
-import test.TestResult;
+import extension.test.TestMethodData;
+import extension.test.TestResult;
 
 import java.util.ArrayList;
 import java.util.HashMap;

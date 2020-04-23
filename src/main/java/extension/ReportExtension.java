@@ -7,16 +7,17 @@ import extension.report.parser.helper.CamelCaseParser;
 import extension.report.parser.helper.SourceCodeParser;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.*;
-import test.*;
+import extension.test.*;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static test.TestResult.FAILED;
-import static test.TestResult.PASSED;
+import static extension.test.TestResult.FAILED;
+import static extension.test.TestResult.PASSED;
 
+//TODO: make this abstract? - so user must implement their own
 public class ReportExtension implements Extension, BeforeAllCallback, AfterEachCallback, AfterAllCallback {
 
     private final ReportToHtmlParser reportParser = new ReportToHtmlParser(new CamelCaseParser(), new SourceCodeParser());

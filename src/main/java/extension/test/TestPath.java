@@ -1,4 +1,4 @@
-package test;
+package extension.test;
 
 import java.nio.file.Files;
 import java.nio.file.Path;

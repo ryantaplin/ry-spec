@@ -1,13 +1,11 @@
 package extension.report.builder;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import test.TestMethodData;
-import test.TestMethodSourceCode;
-import test.TestResult;
+import extension.test.TestMethodData;
+import extension.test.TestMethodSourceCode;
+import extension.test.TestResult;
 
 import java.util.Arrays;
-import java.util.Collections;
 
 import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.assertThat;
