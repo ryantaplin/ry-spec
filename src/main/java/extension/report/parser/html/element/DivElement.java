@@ -5,6 +5,7 @@ import extension.report.parser.html.css.CssBuilder;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import static java.util.stream.Collectors.joining;
@@ -40,4 +41,12 @@ public class DivElement implements HtmlElement {
                 collectedContent);
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        DivElement that = (DivElement) o;
+        return Objects.equals(contentList, that.contentList) &&
+                Objects.equals(cssBuilder, that.cssBuilder);
+    }
 }

@@ -2,6 +2,8 @@ package extension.report.parser.html;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
+
 import static extension.report.parser.html.HtmlContent.content;
 import static extension.report.parser.html.HtmlTemplateBuilder.htmlTemplate;
 import static extension.report.parser.html.element.DivElement.div;
@@ -44,5 +46,11 @@ class HtmlTemplateBuilderTest {
     void resultContainsSpecifiedElementInput() {
         HtmlTemplateBuilder template = htmlTemplate().withElement(div(content("SomeDivContent")));
         assertThat(template.build()).contains("<div>SomeDivContent</div>");
+    }
+
+    @Test
+    void resultContainsAllElements() {
+        HtmlTemplateBuilder template = htmlTemplate().withElements(Arrays.asList(div(content("one")),div(content("two"))));
+        assertThat(template.build()).contains("<div>one</div><div>two</div>");
     }
 }

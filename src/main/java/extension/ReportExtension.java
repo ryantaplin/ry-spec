@@ -3,11 +3,16 @@ package extension;
 import extension.report.ReportGenerator;
 import extension.report.builder.ReportBuilder;
 import extension.report.parser.ReportToHtmlParser;
-import extension.report.parser.helper.CamelCaseParser;
+import extension.report.parser.TestSourceCodeToHtmlParser;
+import extension.report.parser.helper.CamelCaseSplitter;
+import extension.report.parser.helper.SentenceFormatter;
 import extension.report.parser.helper.SourceCodeParser;
+import extension.test.TestMethodData;
+import extension.test.TestPath;
+import extension.test.TestResult;
+import extension.test.TestSourceCode;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.*;
-import extension.test.*;
 
 import java.util.Arrays;
 import java.util.List;
@@ -20,7 +25,13 @@ import static extension.test.TestResult.PASSED;
 //TODO: make this abstract? - so user must implement their own
 public class ReportExtension implements Extension, BeforeAllCallback, AfterEachCallback, AfterAllCallback {
 
-    private final ReportToHtmlParser reportParser = new ReportToHtmlParser(new CamelCaseParser(), new SourceCodeParser());
+    private final CamelCaseSplitter camelCaseSplitter = new CamelCaseSplitter();
+    private final SourceCodeParser sourceCodeParser = new SourceCodeParser();
+    private final SentenceFormatter sentenceFormatter = new SentenceFormatter();
+    private final TestSourceCodeToHtmlParser sourceCodeToHtmlParser = new TestSourceCodeToHtmlParser(
+            sourceCodeParser, camelCaseSplitter, sentenceFormatter);
+
+    private final ReportToHtmlParser reportParser = new ReportToHtmlParser(camelCaseSplitter, sourceCodeToHtmlParser);
     private final ReportGenerator reportGenerator = new ReportGenerator(reportParser);
 
     private ReportBuilder reportBuilder;

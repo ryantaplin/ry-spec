@@ -29,4 +29,10 @@ class CssBuilderTest {
         CssBuilder cssBuilder = css().fontColour(WHITE);
         assertThat(cssBuilder.asString()).isEqualTo(String.format("style=\"color:%s\"", WHITE_HEX));
     }
+
+    @Test
+    void fontSizeAsString() {
+        CssBuilder cssBuilder = css().fontSize(50);
+        assertThat(cssBuilder.asString()).isEqualTo("style=\"font-size:50px\"");
+    }
 }

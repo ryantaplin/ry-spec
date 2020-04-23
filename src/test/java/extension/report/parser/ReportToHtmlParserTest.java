@@ -1,7 +1,8 @@
 package extension.report.parser;
 
 import extension.report.builder.ReportBuilder;
-import extension.report.parser.helper.CamelCaseParser;
+import extension.report.parser.helper.CamelCaseSplitter;
+import extension.report.parser.helper.SentenceFormatter;
 import extension.report.parser.helper.SourceCodeParser;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,11 +21,14 @@ import static org.mockito.Mockito.when;
 
 class ReportToHtmlParserTest {
 
-    private final CamelCaseParser ccParser = mock(CamelCaseParser.class);
+    private final CamelCaseSplitter ccSplitter = mock(CamelCaseSplitter.class);
+    private final SentenceFormatter sFormatter = mock(SentenceFormatter.class);
     private final SourceCodeParser scParser = mock(SourceCodeParser.class);
 
+    private final TestSourceCodeToHtmlParser scToHtmlParser = new TestSourceCodeToHtmlParser(scParser, ccSplitter, sFormatter);
+
     private final ReportBuilder reportBuilder = mock(ReportBuilder.class);
-    private final ReportToHtmlParser reportToHtmlParser = new ReportToHtmlParser(ccParser, scParser);
+    private final ReportToHtmlParser reportToHtmlParser = new ReportToHtmlParser(ccSplitter, scToHtmlParser);
 
     @BeforeEach
     void setUp() {
@@ -35,8 +39,9 @@ class ReportToHtmlParserTest {
             Object[] args = invocation.getArguments();
             return (String) args[0];
         };
-        when(ccParser.parse(anyString())).thenAnswer(withInput);
+        when(ccSplitter.split(anyString())).thenAnswer(withInput);
         when(scParser.parse(anyString())).thenAnswer(withInput);
+        when(sFormatter.format(anyString())).thenAnswer(withInput);
     }
 
     @Test

@@ -12,13 +12,18 @@ public class HtmlTemplateBuilder {
         return new HtmlTemplateBuilder();
     }
 
-    public HtmlTemplateBuilder withElement(HtmlValue element) {
-        elements.add(element);
+    public HtmlTemplateBuilder withTitle(String title) {
+        this.title = title;
         return this;
     }
 
-    public HtmlTemplateBuilder withTitle(String title) {
-        this.title = title;
+    public HtmlTemplateBuilder withElement(HtmlValue element) {
+        this.elements.add(element);
+        return this;
+    }
+
+    public HtmlTemplateBuilder withElements(List<HtmlValue> elements) {
+        this.elements.addAll(elements);
         return this;
     }
 
