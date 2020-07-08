@@ -1,26 +1,26 @@
-package extension.report.builder;
+package extension.test;
 
-import extension.test.TestMethodData;
-import extension.test.TestResult;
+import extension.helpers.TestMethodExtractor;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
-public class ReportBuilder {
+//TODO: refactor out
+
+
+public class TestSpecimen {
 
     private final String classPath;
     private final HashMap<String, TestMethodData> methodDataMap = new HashMap<>();
 
-    private ReportBuilder(String testClass, List<TestMethodData> testMethodData) {
-        this.classPath = testClass;
-        for (TestMethodData testMethodDataEntry : testMethodData) {
+    private TestSpecimen(Class<?> specimen) {
+        this.classPath = TestPath.forClass(specimen).asString();
+        for (TestMethodData testMethodDataEntry : TestMethodExtractor.getTestMethods(specimen)) {
             methodDataMap.put(testMethodDataEntry.getName(), testMethodDataEntry);
         }
     }
 
-    public static ReportBuilder init(String testClass, List<TestMethodData> testMethodData) {
-        return new ReportBuilder(testClass, testMethodData);
+    public static TestSpecimen initializeForClass(Class<?> specimen) {
+        return new TestSpecimen(specimen);
     }
 
     public void updateTestMethodResult(String testName, TestResult testResult) {
@@ -36,4 +36,8 @@ public class ReportBuilder {
     public List<TestMethodData> getTestMethodData() {
         return new ArrayList<>(methodDataMap.values());
     }
+
+//    public void updateTestMethodInterestings(String name, String interesting) {
+//
+//    }
 }

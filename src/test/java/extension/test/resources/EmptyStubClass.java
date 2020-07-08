@@ -1,4 +1,4 @@
 package extension.test.resources;
 
-public class EmptyStubExtractClass {
+public final class EmptyStubClass {
 }

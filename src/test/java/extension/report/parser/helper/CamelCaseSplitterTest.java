@@ -10,11 +10,26 @@ class CamelCaseSplitterTest {
 
     @Test
     void allCamelCasedWordsAreSeparateByASpace() {
-        assertThat(camelCaseSplitter.split("theQuick")).contains("the Quick");
+        assertThat(camelCaseSplitter.split("someSentence")).contains("some Sentence");
     }
 
     @Test
-    void doesNotReturnStringWithDoubleSpaces() {
-        assertThat(camelCaseSplitter.split("theQuick BrownFox")).isEqualTo("the Quick Brown Fox");
+    void removesLeadingSpaces() {
+        assertThat(camelCaseSplitter.split("   someSentence")).isEqualTo("some Sentence");
+    }
+
+    @Test
+    void removesTrailingSpaces() {
+        assertThat(camelCaseSplitter.split("someSentence   ")).isEqualTo("some Sentence");
+    }
+
+    @Test
+    void removesMultipleSpacesBetweenWords() {
+        assertThat(camelCaseSplitter.split("some   Very LongUnformattedSentence")).isEqualTo("some Very Long Unformatted Sentence");
+    }
+
+    @Test
+    void doesNotThrowExceptionWhenNullIsInput() {
+        assertThat(camelCaseSplitter.split(null)).isEqualTo("");
     }
 }

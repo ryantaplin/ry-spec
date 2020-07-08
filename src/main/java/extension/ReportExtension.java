@@ -1,29 +1,19 @@
 package extension;
 
-import extension.report.ReportGenerator;
-import extension.report.builder.ReportBuilder;
+import extension.report.HtmlReportGenerator;
+import extension.test.TestSpecimen;
 import extension.report.parser.ReportToHtmlParser;
 import extension.report.parser.TestSourceCodeToHtmlParser;
 import extension.report.parser.helper.CamelCaseSplitter;
 import extension.report.parser.helper.SentenceFormatter;
 import extension.report.parser.helper.SourceCodeParser;
 import extension.report.parser.html.css.helper.TestContentCssHelper;
-import extension.test.TestMethodData;
-import extension.test.TestPath;
-import extension.test.TestResult;
-import extension.test.TestSourceCode;
-import org.junit.jupiter.api.Test;
+import extension.helpers.TestStateExtractor;
 import org.junit.jupiter.api.extension.*;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 import static extension.test.TestResult.FAILED;
 import static extension.test.TestResult.PASSED;
 
-//TODO: make this abstract? - so user must implement their own
 public class ReportExtension implements Extension, BeforeAllCallback, AfterEachCallback, AfterAllCallback {
 
     private final CamelCaseSplitter camelCaseSplitter = new CamelCaseSplitter();
@@ -35,42 +25,29 @@ public class ReportExtension implements Extension, BeforeAllCallback, AfterEachC
             sourceCodeParser, camelCaseSplitter, sentenceFormatter, testContentCssHelper);
 
     private final ReportToHtmlParser reportParser = new ReportToHtmlParser(camelCaseSplitter, sourceCodeToHtmlParser);
-    private final ReportGenerator reportGenerator = new ReportGenerator(reportParser);
+    private final HtmlReportGenerator htmlReportGenerator = new HtmlReportGenerator(reportParser);
 
-    private ReportBuilder reportBuilder;
+    private TestSpecimen testSpecimen;
 
     @Override
     public void beforeAll(ExtensionContext context) throws Exception {
-        Class<?> testClass = context.getTestClass().orElseThrow(() -> new Exception("TODO: Exception")); //TODO: Exception
-
-        TestPath path = TestPath.getForClass(testClass.getName());
-        TestSourceCode sourceCode = TestSourceCode.read(path);
-
-        //TODO: extract/tidy
-        List<TestMethodData> initTestMethodData = Arrays.stream(testClass.getDeclaredMethods())
-                .filter(x -> Optional.ofNullable(x.getAnnotation(Test.class)).isPresent())
-                .map(method -> new TestMethodData(method.getName(), sourceCode.extract(method), TestResult.NOT_RUN))
-                .collect(Collectors.toList());
-
-        this.reportBuilder = ReportBuilder.init(getClassName(context), initTestMethodData);
+        this.testSpecimen = context.getTestClass()
+                .map(TestSpecimen::initializeForClass)
+                .orElseThrow(() -> new Exception("TODO:"));
     }
 
     @Override
-    public void afterEach(ExtensionContext context) {
-        String testName = context.getDisplayName().split("\\(")[0];
-        TestResult testResult = context.getExecutionException().map(x -> FAILED).orElse(PASSED);
-        reportBuilder.updateTestMethodResult(testName, testResult);
+    public void afterEach(ExtensionContext context) throws Exception {
+        String name = context.getDisplayName().split("\\(")[0];
+        testSpecimen.updateTestMethodResult(name, context.getExecutionException().map(x -> FAILED).orElse(PASSED));
+        context.getTestInstance()
+                .flatMap(TestStateExtractor::getOptionalTestStateFrom);
+//                .ifPresent(state -> testSpecimen.updateTestMethodInterestings(name, state.getInterestings()));
     }
 
     @Override
     public void afterAll(ExtensionContext context) {
-        reportGenerator.generate(reportBuilder);
+        htmlReportGenerator.generate(testSpecimen);
     }
 
-    private String getClassName(ExtensionContext context) throws Exception {
-        //TODO: replace the exception with something more suitable.
-        return context.getTestClass()
-                .map(x -> x.getName().replaceAll("\\.", "\\/"))
-                .orElseThrow(() -> new Exception("The class name could not be extracted..."));
-    }
 }

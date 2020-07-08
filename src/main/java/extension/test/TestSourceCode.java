@@ -2,16 +2,24 @@ package extension.test;
 
 import java.lang.reflect.Method;
 import java.nio.file.Files;
+import java.util.Optional;
 
 public class TestSourceCode {
+
     private String sourceCode;
+
 
     TestSourceCode(String sourceCode) {
         this.sourceCode = sourceCode;
     }
 
-    public static TestSourceCode read(TestPath testPath) throws Exception {
-        return new TestSourceCode(String.join("\n", Files.readAllLines(testPath.toPath())));
+    public static Optional<TestSourceCode> read(TestPath testPath) {
+        try {
+            return Optional.of(new TestSourceCode(String.join("\n", Files.readAllLines(testPath.asPath()))));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+       return Optional.empty();
     }
 
     public TestMethodSourceCode extract(Method method) {

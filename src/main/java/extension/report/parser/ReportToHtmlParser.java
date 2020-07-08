@@ -1,6 +1,6 @@
 package extension.report.parser;
 
-import extension.report.builder.ReportBuilder;
+import extension.test.TestSpecimen;
 import extension.report.parser.helper.CamelCaseSplitter;
 import extension.report.parser.html.HtmlValue;
 import extension.report.parser.html.css.CssBuilder;
@@ -22,7 +22,7 @@ public class ReportToHtmlParser implements ReportParser {
         this.testSourceCodeToHtmlParser = testSourceCodeToHtmlParser;
     }
 
-    public String parse(ReportBuilder report) {
+    public String parse(TestSpecimen report) {
         HtmlValue pageTitle = formatPageTitle(report.getClassPath());
         return htmlTemplate()
                 .withTitle(pageTitle.asString())

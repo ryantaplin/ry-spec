@@ -15,21 +15,23 @@ class SentenceFormatterTest {
 
     @Test
     void firstCharacterOfInputIsCapitalised() {
-        assertThat(sentenceFormatter.format("theQuick"))
-                .startsWith("Thequick");
+        assertThat(sentenceFormatter.format("theQuick")).startsWith("Thequick");
     }
 
     @ParameterizedTest(name = "\"{0}\" should be formatted as \"{1}\"")
     @MethodSource("inputAndOutputExamples")
     void allCharactersFollowingTheFirstLetterOfTheFirstWordAreNotCapitalised(String input, String output) {
-        assertThat(sentenceFormatter.format(input))
-                .isEqualTo(output);
+        assertThat(sentenceFormatter.format(input)).isEqualTo(output);
     }
 
     @Test
-    void doesNotBlowUpWhenEmptyStringIsInput() {
-        assertThat(sentenceFormatter.format(""))
-                .isEqualTo("");
+    void doesNotThrowExceptionWhenEmptyStringIsInput() {
+        assertThat(sentenceFormatter.format("")).isEqualTo("");
+    }
+
+    @Test
+    void doesNotThrowExceptionWhenNullIsInput() {
+        assertThat(sentenceFormatter.format(null)).isEqualTo("");
     }
 
     private static Stream<Arguments> inputAndOutputExamples() {

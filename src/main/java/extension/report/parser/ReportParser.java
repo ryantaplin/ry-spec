@@ -1,9 +1,9 @@
 package extension.report.parser;
 
-import extension.report.builder.ReportBuilder;
+import extension.test.TestSpecimen;
 
 public interface ReportParser {
 
-    String parse(ReportBuilder reportBuilder);
+    String parse(TestSpecimen testSpecimen);
 
 }

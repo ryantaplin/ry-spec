@@ -7,24 +7,39 @@ import java.util.Optional;
 
 public class TestPath {
 
-    private final String className;
+    private final String value;
 
-    private TestPath(String className) {
-        this.className = className;
+    private TestPath(String value) {
+        this.value = value;
     }
 
     //TODO: Extract testDirectory out - may need to be a property
-    public static TestPath getForClass(String className) {
-        return new TestPath(className);
+    public static TestPath forClass(Class<?> clazz) {
+        return new TestPath(
+                getPathString(clazz).orElse("")
+        );
     }
 
-    public Path toPath() throws Exception {
-        return Optional.of(Paths.get(getClassPath()))
+    public Path asPath() throws Exception {
+        return Optional.of(Paths.get(value))
                 .filter(p -> Files.exists(p))
-                .orElseThrow(() -> new Exception(String.format("%s does not exist.", getClassPath())));
+                .orElseThrow(() -> new Exception(String.format("%s does not exist.", asString())));
     }
 
-    public String getClassPath() {
-        return String.format("src/test/java/%s.java", className.replaceAll("\\.", "/"));
+    public String asString() {
+        return value;
+    }
+
+    private static Optional<String> getPathString(Class<?> clazz) {
+        //TODO: clazz.getProtectedDomain() for full url?
+        return Optional.ofNullable(clazz)
+                .flatMap(TestPath::getName)
+                .map(name -> name.replaceAll("\\.", "/"))
+                .map(name -> String.format("src/test/java/%s.java", name));
+    }
+
+    private static Optional<String> getName(Class<?> clazz) {
+        return Optional.ofNullable(clazz)
+                .map(Class::getName);
     }
 }

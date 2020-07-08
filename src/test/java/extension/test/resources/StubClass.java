@@ -2,7 +2,7 @@ package extension.test.resources;
 
 import org.junit.jupiter.api.Test;
 
-public class StubExtractClass {
+public final class StubClass {
 
     @Test
     void stubExampleOne() {

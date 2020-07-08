@@ -14,14 +14,14 @@ public class SourceCodeParser {
     public String parse(String input) {
         return Stream.of(removeForbiddenCharacters(input).split("\n"))
                 .skip(1)
-                .map(line -> line.replaceAll(" {2}", " "))
-                .map(String::strip)
+                .map(line -> line.replaceAll(" +", " "))
+                .map(String::trim)
                 .collect(Collectors.joining("\n"));
     }
 
     private String removeForbiddenCharacters(String input) {
         return input.codePoints()
-                .mapToObj(character -> (char) character)
+                .mapToObj(character -> (char)character)
                 .map(this::forbiddenCharacterToSpace)
                 .map(String::valueOf)
                 .collect(joining());

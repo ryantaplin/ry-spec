@@ -8,6 +8,10 @@ public class TestMethodData {
     private TestMethodSourceCode testMethodSourceCode;
     private TestResult testResult;
 
+    //private TestMethodInteractions;
+    //private TestMethodCaptures;
+    //... TODO: testState
+
     public TestMethodData(String testMethodName, TestMethodSourceCode testMethodSourceCode, TestResult testResult) {
         this.testMethodName = testMethodName;
         this.testMethodSourceCode = testMethodSourceCode;

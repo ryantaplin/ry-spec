@@ -1,41 +1,53 @@
 package extension.test;
 
-import org.assertj.core.api.Assertions;
+import extension.test.resources.EmptyStubClass;
+import extension.test.resources.StubClass;
 import org.junit.jupiter.api.Test;
-import extension.test.resources.StubExtractClass;
 
+import java.util.Date;
+
+import static extension.test.TestPath.forClass;
 import static org.assertj.core.api.Assertions.assertThat;
-import static extension.test.TestPath.getForClass;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 
 class TestSourceCodeTest {
 
-    //TODO: separate - class source code reader && method source code extractor
-
     @Test
-    void readSuccessfullyReturnsTestSourceCode() throws Exception {
-        final TestPath emptyStubClass = getForClass("extension.test.resources.EmptyStubExtractClass");
+    void readSuccessfullyReturnsTestSourceCode() {
+        final TestPath emptyStubClass = TestPath.forClass(EmptyStubClass.class);
 
-        TestSourceCode actualSourceCode = TestSourceCode.read(emptyStubClass);
+        TestSourceCode actualSourceCode = TestSourceCode.read(emptyStubClass).orElseThrow();
         assertThat(actualSourceCode.asString()).isEqualTo(EXPECTED_EMPTY_STUB_CLASS_SOURCE_CODE);
     }
 
     @Test
-    void readThrowsExceptionWhenFileCouldNotBeFound() {
-        final TestPath invalidTestPath = getForClass("invalidTestClass");
+    void readReturnsEmptyWhenPathReturnsEmpty() throws Exception {
+        final TestPath emptyTestPath = mock(TestPath.class);
+        when(emptyTestPath.asPath()).thenThrow(new Exception("Boom!"));
+        assertThat(TestSourceCode.read(emptyTestPath)).isEmpty();  //TODO: Logging test
+    }
 
-        Assertions.assertThatThrownBy(() -> TestSourceCode.read(invalidTestPath))
-                .isInstanceOf(Exception.class); //TODO: throw better exception
+    @Test
+    void readReturnsEmptyWhenFileCouldNotBeFoundInTestDirectory() {
+        final TestPath invalidTestPath = TestPath.forClass(Date.class);
+        assertThat(TestSourceCode.read(invalidTestPath)).isEmpty(); //TODO: Logging test
+    }
 
+    @Test
+    void readReturnsEmptyWhenNullIsProvided() {
+        final TestPath invalidTestPath = TestPath.forClass(null);
+        assertThat(TestSourceCode.read(invalidTestPath)).isEmpty(); //TODO: Logging test
     }
 
     //TODO: this will change - NoContents, 1LineContents, MultiLineContents
     @Test
     void extractSuccessfullyExtractMethodContents() throws Exception {
-        final TestPath testPath = getForClass("extension.test.resources.StubExtractClass");
-        final TestSourceCode sourceCode = TestSourceCode.read(testPath);
+        final TestPath testPath = forClass(StubClass.class);
+        final TestSourceCode sourceCode = TestSourceCode.read(testPath).orElseThrow();
 
-        TestMethodSourceCode actualMethodCode = sourceCode.extract(StubExtractClass.class.getDeclaredMethod("stubExampleOne"));
+        TestMethodSourceCode actualMethodCode = sourceCode.extract(StubClass.class.getDeclaredMethod("stubExampleOne"));
         assertThat(actualMethodCode.asString()).isEqualTo(EXPECTED_METHOD_SOURCE_CODE);
     }
 
@@ -45,6 +57,6 @@ class TestSourceCodeTest {
 
     public static final String EXPECTED_EMPTY_STUB_CLASS_SOURCE_CODE = "package extension.test.resources;\n" +
             "\n" +
-            "public class EmptyStubExtractClass {\n" +
+            "public final class EmptyStubClass {\n" +
             "}";
 }

@@ -1,18 +1,15 @@
 package extension.report.parser.helper;
 
-import extension.report.parser.html.css.CssPosition;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class sourceCodeParserTest {
+class SourceCodeParserTest {
 
     public static final String INPUT_SOURCE_CODE_EXAMPLE_1 = "somethingFail() {\n" +
             "                Assertions.fail();\n" +
@@ -27,6 +24,10 @@ class sourceCodeParserTest {
             "Assertions fail\n";
 
     private final SourceCodeParser sourceCodeParser = new SourceCodeParser();
+
+    //TODO: Replace/Remove enum qualifiers? i.e 'Enum.SOMETHING' -> SOMETHING
+    //TODO: Replace/Remove key words? i.e 'new Something()' -> Something
+    //TODO: Replace/Remove static qualifiers? i.e 'Optional.of(Something)' -> 'of ...' or just '...'
 
     @Test
     void replacesSyntaxWithSpace() {

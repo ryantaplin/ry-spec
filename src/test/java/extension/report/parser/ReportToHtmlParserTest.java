@@ -1,6 +1,6 @@
 package extension.report.parser;
 
-import extension.report.builder.ReportBuilder;
+import extension.test.TestSpecimen;
 import extension.report.parser.helper.CamelCaseSplitter;
 import extension.report.parser.helper.SentenceFormatter;
 import extension.report.parser.helper.SourceCodeParser;
@@ -14,7 +14,6 @@ import extension.test.TestResult;
 
 import java.util.List;
 
-import static extension.report.parser.html.css.CssBuilder.css;
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -31,13 +30,13 @@ class ReportToHtmlParserTest {
 
     private final TestSourceCodeToHtmlParser scToHtmlParser = new TestSourceCodeToHtmlParser(scParser, ccSplitter, sFormatter, testContentCssHelper);
 
-    private final ReportBuilder reportBuilder = mock(ReportBuilder.class);
+    private final TestSpecimen testSpecimen = mock(TestSpecimen.class);
     private final ReportToHtmlParser reportToHtmlParser = new ReportToHtmlParser(ccSplitter, scToHtmlParser);
 
     @BeforeEach
     void setUp() {
-        when(reportBuilder.getClassPath()).thenReturn("stubTestClassPath");
-        when(reportBuilder.getTestMethodData()).thenReturn(stubTestMethods());
+        when(testSpecimen.getClassPath()).thenReturn("stubTestClassPath");
+        when(testSpecimen.getTestMethodData()).thenReturn(stubTestMethods());
 
         final Answer<String> withInput = invocation -> {
             Object[] args = invocation.getArguments();
@@ -53,25 +52,25 @@ class ReportToHtmlParserTest {
 
     @Test
     void reportParserIncludesReportBuilderTitle() {
-        String actual = reportToHtmlParser.parse(reportBuilder);
+        String actual = reportToHtmlParser.parse(testSpecimen);
         assertThat(actual).contains("stubTestClassPath");
     }
 
     @Test
     void reportParserIncludesReportBuilderMethodNames() {
-        String actual = reportToHtmlParser.parse(reportBuilder);
+        String actual = reportToHtmlParser.parse(testSpecimen);
         assertThat(actual).contains("stubMethodName1", "stubMethodName2", "stubMethodName3");
     }
 
     @Test
     void reportParserIncludesReportBuilderMethodNameSourceCodes() {
-        String actual = reportToHtmlParser.parse(reportBuilder);
+        String actual = reportToHtmlParser.parse(testSpecimen);
         assertThat(actual).contains("stubMethodSourceCode1", "stubMethodSourceCode2", "stubMethodSourceCode3");
     }
 
     @Test
     void reportParserIncludesReportBuilderMethodResults() {
-        String actual = reportToHtmlParser.parse(reportBuilder);
+        String actual = reportToHtmlParser.parse(testSpecimen);
         assertThat(actual).contains("NOT_RUN", "PASSED", "FAILED");
     }
 

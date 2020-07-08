@@ -17,7 +17,6 @@ import java.util.Collections;
 import java.util.List;
 
 import static extension.report.parser.html.HtmlContent.content;
-import static extension.report.parser.html.css.CssBuilder.css;
 import static extension.report.parser.html.element.DivElement.div;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyString;
