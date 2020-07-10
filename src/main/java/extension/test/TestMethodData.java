@@ -1,12 +1,14 @@
 package extension.test;
 
 import java.util.Objects;
+import java.util.Optional;
 
 public class TestMethodData {
 
     private String testMethodName;
     private TestMethodSourceCode testMethodSourceCode;
     private TestResult testResult;
+    private TestState testState;
 
     //private TestMethodInteractions;
     //private TestMethodCaptures;
@@ -34,6 +36,14 @@ public class TestMethodData {
         this.testResult = testResult;
     }
 
+    public void updateState(TestState state) {
+        this.testState = state;
+    }
+
+    public Optional<TestState> getOptionalState() {
+        return Optional.ofNullable(testState);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -43,5 +53,4 @@ public class TestMethodData {
                 Objects.equals(testMethodSourceCode, that.testMethodSourceCode) &&
                 testResult == that.testResult;
     }
-
 }

@@ -2,7 +2,7 @@ package extension.report;
 
 import extension.test.TestSpecimen;
 import extension.report.parser.ReportParser;
-import extension.test.resources.StubClass;
+import extension.test.resources.StubClassWithATestMethod;
 import helpers.TestReportRetriever;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -32,7 +32,7 @@ public class HtmlReportGeneratorTest {
 
     @Test
     void reportDirectoryAndFileIsCreatedIfItDoesNotExist() throws IOException {
-        testClass.generate(TestSpecimen.initializeForClass(StubClass.class));
+        testClass.generate(TestSpecimen.initializeForClass(StubClassWithATestMethod.class));
 
         assertThat(TestReportRetriever.getReport("unknownDirectory/unknownFileName")).isNotNull();
         assertThat(TestReportRetriever.getReport("stubbed/testClass").asString()).contains("testClass");

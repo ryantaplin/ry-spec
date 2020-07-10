@@ -16,7 +16,7 @@ public class TestPath {
     //TODO: Extract testDirectory out - may need to be a property
     public static TestPath forClass(Class<?> clazz) {
         return new TestPath(
-                getPathString(clazz).orElse("")
+                getPathAsStringFor(clazz).orElse("")
         );
     }
 
@@ -30,7 +30,7 @@ public class TestPath {
         return value;
     }
 
-    private static Optional<String> getPathString(Class<?> clazz) {
+    private static Optional<String> getPathAsStringFor(Class<?> clazz) {
         //TODO: clazz.getProtectedDomain() for full url?
         return Optional.ofNullable(clazz)
                 .flatMap(TestPath::getName)

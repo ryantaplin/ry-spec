@@ -3,7 +3,7 @@ package extension;
 import extension.report.HtmlReportGenerator;
 import extension.test.TestSpecimen;
 import extension.report.parser.ReportToHtmlParser;
-import extension.report.parser.TestSourceCodeToHtmlParser;
+import extension.report.parser.TestMethodDataToHtmlParser;
 import extension.report.parser.helper.CamelCaseSplitter;
 import extension.report.parser.helper.SentenceFormatter;
 import extension.report.parser.helper.SourceCodeParser;
@@ -21,7 +21,7 @@ public class ReportExtension implements Extension, BeforeAllCallback, AfterEachC
     private final SentenceFormatter sentenceFormatter = new SentenceFormatter();
     private final TestContentCssHelper testContentCssHelper = new TestContentCssHelper();
 
-    private final TestSourceCodeToHtmlParser sourceCodeToHtmlParser = new TestSourceCodeToHtmlParser(
+    private final TestMethodDataToHtmlParser sourceCodeToHtmlParser = new TestMethodDataToHtmlParser(
             sourceCodeParser, camelCaseSplitter, sentenceFormatter, testContentCssHelper);
 
     private final ReportToHtmlParser reportParser = new ReportToHtmlParser(camelCaseSplitter, sourceCodeToHtmlParser);
@@ -41,8 +41,8 @@ public class ReportExtension implements Extension, BeforeAllCallback, AfterEachC
         String name = context.getDisplayName().split("\\(")[0];
         testSpecimen.updateTestMethodResult(name, context.getExecutionException().map(x -> FAILED).orElse(PASSED));
         context.getTestInstance()
-                .flatMap(TestStateExtractor::getOptionalTestStateFrom);
-//                .ifPresent(state -> testSpecimen.updateTestMethodInterestings(name, state.getInterestings()));
+                .flatMap(TestStateExtractor::getOptionalTestStateFrom)
+                .ifPresent(state -> testSpecimen.updateTestMethodState(name, state));
     }
 
     @Override

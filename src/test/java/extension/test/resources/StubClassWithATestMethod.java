@@ -2,10 +2,10 @@ package extension.test.resources;
 
 import org.junit.jupiter.api.Test;
 
-public final class StubClass {
+public class StubClassWithATestMethod {
 
     @Test
-    void stubExampleOne() {
+    public void testMethod() {
 
     }
 }

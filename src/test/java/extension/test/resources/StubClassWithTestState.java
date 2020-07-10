@@ -1,10 +1,11 @@
 package extension.test.resources;
 
 import extension.test.TestState;
+import org.junit.jupiter.api.Test;
 
 import java.util.Map;
 
-public final class StubClassWithTestState {
+public class StubClassWithTestState {
 
     private final TestState someState = new TestState() {
         @Override
@@ -15,5 +16,10 @@ public final class StubClassWithTestState {
             return null;
         }
     };
+
+    @Test
+    void testMethod() {
+
+    }
 
 }

@@ -4,16 +4,18 @@ import extension.test.TestState;
 
 import java.lang.reflect.Field;
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Stream;
 
 public class TestStateExtractor {
     public static Optional<TestState> getOptionalTestStateFrom(Object classInstance) {
-        Class<?> curClass = classInstance.getClass();
+        Class<?> curClass = Optional.ofNullable(classInstance).map(Object::getClass).orElse(null);
         while (curClass != null) {
             Optional<TestState> optionalField = findDeclaredTestContainerFor(curClass)
                     .map(field -> extractFieldFromClass(field, classInstance))
                     .map(TestState.class::cast)
+                    .filter(Objects::nonNull)
                     .findFirst();
 
             if (optionalField.isEmpty()) curClass = curClass.getSuperclass();

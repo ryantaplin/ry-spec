@@ -15,11 +15,11 @@ import static extension.report.parser.html.element.DivElement.div;
 public class ReportToHtmlParser implements ReportParser {
 
     private CamelCaseSplitter camelCaseSplitter;
-    private TestSourceCodeToHtmlParser testSourceCodeToHtmlParser;
+    private TestMethodDataToHtmlParser testMethodDataToHtmlParser;
 
-    public ReportToHtmlParser(CamelCaseSplitter camelCaseSplitter, TestSourceCodeToHtmlParser testSourceCodeToHtmlParser) {
+    public ReportToHtmlParser(CamelCaseSplitter camelCaseSplitter, TestMethodDataToHtmlParser testMethodDataToHtmlParser) {
         this.camelCaseSplitter = camelCaseSplitter;
-        this.testSourceCodeToHtmlParser = testSourceCodeToHtmlParser;
+        this.testMethodDataToHtmlParser = testMethodDataToHtmlParser;
     }
 
     public String parse(TestSpecimen report) {
@@ -28,7 +28,7 @@ public class ReportToHtmlParser implements ReportParser {
                 .withTitle(pageTitle.asString())
                 .withElement(div(div(pageTitle).with(css().margin(0, 2, 0, 2)))
                         .with(pageTitleCss()))
-                .withElements(testSourceCodeToHtmlParser.parse(report.getTestMethodData()))
+                .withElements(testMethodDataToHtmlParser.parse(report.getTestMethodData()))
                 .build();
     }
 

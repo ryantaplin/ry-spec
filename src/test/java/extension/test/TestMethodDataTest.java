@@ -2,6 +2,8 @@ package extension.test;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.Map;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 
@@ -33,6 +35,19 @@ class TestMethodDataTest {
     }
 
     @Test
+    void testStateByDefaultIsEmpty() {
+        final TestMethodData testMethodData = new TestMethodData("name", new TestMethodSourceCode("sc"), TestResult.NOT_RUN);
+        assertThat(testMethodData.getOptionalState()).isEmpty();
+    }
+
+    @Test //TODO: repurpose this to process and return individual things from TestState (i.e List<CapturedInputs>, List<InterestingGivens>)?
+    void updateTestStatePopulatesTestState() {
+        final TestMethodData testMethodData = new TestMethodData("name", new TestMethodSourceCode("sc"), TestResult.NOT_RUN);
+        testMethodData.updateState(TEST_STATE);
+        assertThat(testMethodData.getOptionalState().get()).isEqualTo(TEST_STATE);
+    }
+
+    @Test
     void testMethodDataIsEqualsWhenAllValuesAreTheSame() {
         TestMethodData expected = new TestMethodData("name", new TestMethodSourceCode("sourceCode"), TestResult.PASSED);
         assertThat(actualTestMethodData).isEqualTo(expected);
@@ -55,4 +70,14 @@ class TestMethodDataTest {
         TestMethodData expected = new TestMethodData("name", new TestMethodSourceCode("differentSourceCode"), TestResult.PASSED);
         assertThat(actualTestMethodData).isNotEqualTo(expected);
     }
+
+    private static final TestState TEST_STATE = new TestState() {
+        @Override
+        public void putOrAddInteresting(String key, Object value) {}
+
+        @Override
+        public Map<String, Object> getInterestings() {
+            return null;
+        }
+    };
 }

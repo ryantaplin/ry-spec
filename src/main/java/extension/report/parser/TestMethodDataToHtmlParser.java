@@ -9,15 +9,18 @@ import extension.report.parser.html.css.helper.TestContentCssHelper;
 import extension.test.TestMethodData;
 import extension.test.TestMethodSourceCode;
 import extension.test.TestResult;
+import extension.test.TestState;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static extension.report.parser.html.HtmlContent.content;
 import static extension.report.parser.html.element.DivElement.div;
 
-public class TestSourceCodeToHtmlParser {
+public class TestMethodDataToHtmlParser {
 
     private final SourceCodeParser sourceCodeParser;
 
@@ -26,7 +29,7 @@ public class TestSourceCodeToHtmlParser {
     private final TestContentCssHelper cssHelper;
 
 
-    public TestSourceCodeToHtmlParser(SourceCodeParser sourceCodeParser, CamelCaseSplitter camelCaseSplitter, SentenceFormatter sentenceFormatter, TestContentCssHelper cssHelper) {
+    public TestMethodDataToHtmlParser(SourceCodeParser sourceCodeParser, CamelCaseSplitter camelCaseSplitter, SentenceFormatter sentenceFormatter, TestContentCssHelper cssHelper) {
         this.sourceCodeParser = sourceCodeParser;
         this.camelCaseSplitter = camelCaseSplitter;
         this.sentenceFormatter = sentenceFormatter;
@@ -37,9 +40,20 @@ public class TestSourceCodeToHtmlParser {
         return testMethodData.stream()
                 .map(data -> div(
                         div(generateHeaderContent(data.getName(), data.getResult())).with(cssHelper.headerCss()),
-                        div(generateBodyContent(data.getSourceCode())).with(cssHelper.bodyCss())
+                        div(generateBodyContent(data.getSourceCode())).with(cssHelper.bodyCss()),
+                        data.getOptionalState().isEmpty() ? div() :  //TODO: better / impl
+                                div(generateTestStateContent(data.getOptionalState())).with(cssHelper.bodyCss())
                 ).with(cssHelper.containerCss()))
                 .collect(Collectors.toList());
+    }
+
+    private HtmlContent generateTestStateContent(Optional<TestState> testState) {
+        String woo = testState
+                .map(TestState::getInterestings)
+                .map(Map::values)
+                .stream().map(Object::toString) //TODO: CustomObjectParsers
+                .findFirst().orElse("null");
+        return content(String.format("Interesting: %s", woo));
     }
 
     private HtmlContent generateHeaderContent(String name, TestResult result) {

@@ -1,6 +1,6 @@
 package extension.test;
 
-import extension.test.resources.StubClass;
+import extension.test.resources.StubClassWithATestMethod;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -13,14 +13,14 @@ class TestPathTest {
 
     @Test
     void getForClassIncludesTestDirectoryInPath() {
-        TestPath testClass = TestPath.forClass(StubClass.class);
+        TestPath testClass = TestPath.forClass(StubClassWithATestMethod.class);
         assertThat(testClass.asString()).contains("src/test/java/");
     }
 
     @Test
     void getForClassConvertsDotsToForwardSlashes() {
-        TestPath testClass = TestPath.forClass(StubClass.class);
-        assertThat(testClass.asString()).isEqualTo("src/test/java/extension/test/resources/StubClass.java");
+        TestPath testClass = TestPath.forClass(StubClassWithATestMethod.class);
+        assertThat(testClass.asString()).isEqualTo("src/test/java/extension/test/resources/StubClassWithATestMethod.java");
     }
 
     @Test

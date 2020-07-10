@@ -24,9 +24,8 @@ public class TestSpecimen {
     }
 
     public void updateTestMethodResult(String testName, TestResult testResult) {
-        if (methodDataMap.containsKey(testName)) {
-            methodDataMap.get(testName).updateResult(testResult);
-        }
+        Optional.ofNullable(methodDataMap.get(testName))
+                .ifPresent(x -> x.updateResult(testResult));
     }
 
     public String getClassPath() {
@@ -37,7 +36,8 @@ public class TestSpecimen {
         return new ArrayList<>(methodDataMap.values());
     }
 
-//    public void updateTestMethodInterestings(String name, String interesting) {
-//
-//    }
+    public void updateTestMethodState(String testName, TestState state) {
+            Optional.ofNullable(methodDataMap.get(testName))
+                    .ifPresent(x -> x.updateState(state));
+    }
 }

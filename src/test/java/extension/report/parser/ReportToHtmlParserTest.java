@@ -28,7 +28,7 @@ class ReportToHtmlParserTest {
     private final SourceCodeParser scParser = mock(SourceCodeParser.class);
     private final TestContentCssHelper testContentCssHelper = mock(TestContentCssHelper.class);
 
-    private final TestSourceCodeToHtmlParser scToHtmlParser = new TestSourceCodeToHtmlParser(scParser, ccSplitter, sFormatter, testContentCssHelper);
+    private final TestMethodDataToHtmlParser scToHtmlParser = new TestMethodDataToHtmlParser(scParser, ccSplitter, sFormatter, testContentCssHelper);
 
     private final TestSpecimen testSpecimen = mock(TestSpecimen.class);
     private final ReportToHtmlParser reportToHtmlParser = new ReportToHtmlParser(ccSplitter, scToHtmlParser);

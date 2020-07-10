@@ -19,13 +19,19 @@ public class HtmlReportGenerator implements ReportGenerator {
         this.reportParser = reportParser;
     }
 
-    public void generate(TestSpecimen report) {
-        File file = createFileIfNotPresent(String.format("%s/%s/%s.html", BASE_REPORT_LOCATION, getReportsLocation(), report.getClassPath()));
+    public void generate(TestSpecimen specimen) {
+        File file = createFileIfNotPresent(getReportPathForSpecimen(specimen.getClassPath()));
         try (FileWriter fileWriter = new FileWriter(file)) {
-            fileWriter.write(reportParser.parse(report));
+            fileWriter.write(reportParser.parse(specimen));
         } catch (IOException e) {
             e.printStackTrace(); //TODO: better exception handling
         }
+    }
+
+    private String getReportPathForSpecimen(String specimenClassPath) {
+        String result = String.format("%s/%s/%s.html", BASE_REPORT_LOCATION, getReportsLocation(), specimenClassPath);
+        System.out.println(result);
+        return result;
     }
 
     private static File createFileIfNotPresent(String filePath) {

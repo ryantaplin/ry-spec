@@ -1,7 +1,7 @@
 package extension.test;
 
 import extension.test.resources.EmptyStubClass;
-import extension.test.resources.StubClass;
+import extension.test.resources.StubClassWithATestMethod;
 import org.junit.jupiter.api.Test;
 
 import java.util.Date;
@@ -44,14 +44,14 @@ class TestSourceCodeTest {
     //TODO: this will change - NoContents, 1LineContents, MultiLineContents
     @Test
     void extractSuccessfullyExtractMethodContents() throws Exception {
-        final TestPath testPath = forClass(StubClass.class);
+        final TestPath testPath = forClass(StubClassWithATestMethod.class);
         final TestSourceCode sourceCode = TestSourceCode.read(testPath).orElseThrow();
 
-        TestMethodSourceCode actualMethodCode = sourceCode.extract(StubClass.class.getDeclaredMethod("stubExampleOne"));
+        TestMethodSourceCode actualMethodCode = sourceCode.extract(StubClassWithATestMethod.class.getDeclaredMethod("testMethod"));
         assertThat(actualMethodCode.asString()).isEqualTo(EXPECTED_METHOD_SOURCE_CODE);
     }
 
-    public static final String EXPECTED_METHOD_SOURCE_CODE = "stubExampleOne() {\n" +
+    public static final String EXPECTED_METHOD_SOURCE_CODE = "testMethod() {\n" +
             "\n" +
             "}\n";
 

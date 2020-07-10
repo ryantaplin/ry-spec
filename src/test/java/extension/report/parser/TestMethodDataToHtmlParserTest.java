@@ -23,7 +23,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class TestSourceCodeToHtmlParserTest {
+class TestMethodDataToHtmlParserTest {
 
     private final SourceCodeParser sourceCodeParser = mock(SourceCodeParser.class);
     private final CamelCaseSplitter camelCaseSplitter = mock(CamelCaseSplitter.class);
@@ -31,7 +31,7 @@ class TestSourceCodeToHtmlParserTest {
     private final TestContentCssHelper testContentCssHelper = mock(TestContentCssHelper.class);
 
 
-    private final TestSourceCodeToHtmlParser parser = new TestSourceCodeToHtmlParser(
+    private final TestMethodDataToHtmlParser parser = new TestMethodDataToHtmlParser(
             sourceCodeParser,
             camelCaseSplitter,
             sentenceFormatter,
@@ -60,15 +60,15 @@ class TestSourceCodeToHtmlParserTest {
     @Test
     void returnsDivElementWithExpectedContent() {
         List<HtmlValue> result = parser.parse(Arrays.asList(testMethodData1()));
-        assertThat(result).containsExactlyInAnyOrder(div(div(content("someName : PASSED")), div(content("sourceCode"))));
+        assertThat(result).containsExactlyInAnyOrder(div(div(content("someName : PASSED")), div(content("sourceCode")), div()));
     }
 
     @Test
     void returnsMultipleDivElementsWithExpectedContent() {
         List<HtmlValue> result = parser.parse(Arrays.asList(testMethodData1(), testMethodData2()));
         assertThat(result).containsExactlyInAnyOrder(
-                div(div(content("someName : PASSED")), div(content("sourceCode"))),
-                div(div(content("anotherName : FAILED")), div(content("sourceCode"))));
+                div(div(content("someName : PASSED")), div(content("sourceCode")), div()),
+                div(div(content("anotherName : FAILED")), div(content("sourceCode")), div()));
     }
 
     private TestMethodData testMethodData1() {
