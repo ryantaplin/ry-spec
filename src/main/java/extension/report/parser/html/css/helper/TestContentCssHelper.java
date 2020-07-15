@@ -10,6 +10,7 @@ import static extension.report.parser.html.css.CssElements.css;
 import static extension.report.parser.html.css.CssMargin.margin;
 import static extension.report.parser.html.css.CssPadding.padding;
 
+//TODO: convert this to a factory and split out cssHelpers per element (i.e header, sourceCode, testState)..
 public class TestContentCssHelper {
 
     public CssElements headerCss() {

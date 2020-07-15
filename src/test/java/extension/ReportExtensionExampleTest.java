@@ -10,8 +10,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@ExtendWith(ReportExtension.class)
-public class ReportExtensionExampleTest {
+public class ReportExtensionExampleTest extends AcceptanceTest {
 
     public static final String CHICKEN = "Chicken";
     public static final String RABBIT = "Rabbit";
