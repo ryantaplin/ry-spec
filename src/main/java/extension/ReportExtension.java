@@ -1,14 +1,18 @@
 package extension;
 
-import extension.report.HtmlReportGenerator;
-import extension.test.TestSpecimen;
-import extension.report.parser.ReportToHtmlParser;
-import extension.report.parser.TestMethodDataToHtmlParser;
+import extension.helpers.TestStateExtractor;
+import extension.report.ReportFileWriter;
+import extension.report.parser.HtmlReportGenerator;
+import extension.report.parser.TestSpecimenToHtmlWorker;
 import extension.report.parser.helper.CamelCaseSplitter;
+import extension.report.parser.helper.ForbiddenCharacterFilter;
 import extension.report.parser.helper.SentenceFormatter;
 import extension.report.parser.helper.SourceCodeParser;
 import extension.report.parser.html.css.helper.TestContentCssHelper;
-import extension.helpers.TestStateExtractor;
+import extension.report.parser.html.parser.TestHeaderToHtmlParser;
+import extension.report.parser.html.parser.TestSourceCodeToHtmlParser;
+import extension.report.parser.html.parser.TestStateToHtmlParser;
+import extension.test.TestSpecimen;
 import org.junit.jupiter.api.extension.*;
 
 import static extension.test.TestResult.FAILED;
@@ -16,16 +20,20 @@ import static extension.test.TestResult.PASSED;
 
 public class ReportExtension implements Extension, BeforeAllCallback, AfterEachCallback, AfterAllCallback {
 
-    private final CamelCaseSplitter camelCaseSplitter = new CamelCaseSplitter();
-    private final SourceCodeParser sourceCodeParser = new SourceCodeParser();
-    private final SentenceFormatter sentenceFormatter = new SentenceFormatter();
+    private final SentenceFormatter sentenceFormatter = new SentenceFormatter(new CamelCaseSplitter());
+    private final SourceCodeParser sourceCodeParser = new SourceCodeParser(new ForbiddenCharacterFilter(), sentenceFormatter);
+
     private final TestContentCssHelper testContentCssHelper = new TestContentCssHelper();
-
-    private final TestMethodDataToHtmlParser sourceCodeToHtmlParser = new TestMethodDataToHtmlParser(
-            sourceCodeParser, camelCaseSplitter, sentenceFormatter, testContentCssHelper);
-
-    private final ReportToHtmlParser reportParser = new ReportToHtmlParser(camelCaseSplitter, sourceCodeToHtmlParser);
-    private final HtmlReportGenerator htmlReportGenerator = new HtmlReportGenerator(reportParser);
+    private final ReportFileWriter reportToFileWriter = new ReportFileWriter(
+            new HtmlReportGenerator(
+                    sentenceFormatter,
+                    new TestSpecimenToHtmlWorker(
+                            new TestHeaderToHtmlParser(sentenceFormatter, testContentCssHelper),
+                            new TestSourceCodeToHtmlParser(sourceCodeParser, testContentCssHelper),
+                            new TestStateToHtmlParser(testContentCssHelper),
+                            testContentCssHelper)
+            )
+    );
 
     private TestSpecimen testSpecimen;
 
@@ -37,7 +45,7 @@ public class ReportExtension implements Extension, BeforeAllCallback, AfterEachC
     }
 
     @Override
-    public void afterEach(ExtensionContext context) throws Exception {
+    public void afterEach(ExtensionContext context) {
         String name = context.getDisplayName().split("\\(")[0];
         testSpecimen.updateTestMethodResult(name, context.getExecutionException().map(x -> FAILED).orElse(PASSED));
         context.getTestInstance()
@@ -47,7 +55,7 @@ public class ReportExtension implements Extension, BeforeAllCallback, AfterEachC
 
     @Override
     public void afterAll(ExtensionContext context) {
-        htmlReportGenerator.generate(testSpecimen);
+        reportToFileWriter.write(testSpecimen);
     }
 
 }

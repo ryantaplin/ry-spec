@@ -1,35 +1,33 @@
 package extension.report.parser.helper;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import extension.test.TestMethodSourceCode;
 
-import static java.util.stream.Collectors.joining;
+import java.util.Arrays;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import static java.util.Collections.emptyList;
 
 public class SourceCodeParser {
 
-    private final List<Character> forbiddenCharacters = Arrays.asList(',', ';', '{', '}', '(', ')', '.', ' ', '_');
+    private final ForbiddenCharacterFilter forbiddenCharacterFilter;
+    private final SentenceFormatter formatter;
 
-    public String parse(String input) {
-        return Stream.of(removeForbiddenCharacters(input).split("\n"))
+    public SourceCodeParser(ForbiddenCharacterFilter forbiddenCharacterFilter, SentenceFormatter formatter) {
+        this.forbiddenCharacterFilter = forbiddenCharacterFilter;
+        this.formatter = formatter;
+    }
+
+    public String format(TestMethodSourceCode input) {
+        return Optional.ofNullable(input)
+                .map(TestMethodSourceCode::asString)
+                .map(string -> Arrays.asList(string.split("\n"))).orElse(emptyList()).stream()
                 .skip(1)
-                .map(line -> line.replaceAll(" +", " "))
-                .map(String::trim)
+                .map(forbiddenCharacterFilter::filter)
+                .map(formatter::format)
                 .collect(Collectors.joining("\n"));
     }
 
-    private String removeForbiddenCharacters(String input) {
-        return input.codePoints()
-                .mapToObj(character -> (char)character)
-                .map(this::forbiddenCharacterToSpace)
-                .map(String::valueOf)
-                .collect(joining());
-    }
 
-    private Character forbiddenCharacterToSpace(Character character) {
-        if (forbiddenCharacters.contains(character)) return ' ';
-        else return character;
-    }
 }
 

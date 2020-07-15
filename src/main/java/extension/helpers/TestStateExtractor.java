@@ -1,9 +1,10 @@
 package extension.helpers;
 
-import extension.test.TestState;
+import extension.test.state.TestState;
 
 import java.lang.reflect.Field;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -26,7 +27,12 @@ public class TestStateExtractor {
 
     private static Stream<Field> findDeclaredTestContainerFor(Class<?> curClass) {
         return Arrays.stream(curClass.getDeclaredFields())
-                .filter(field -> TestState.class.equals(field.getType()));
+                .filter(TestStateExtractor::isTestStateOrImplementorOfTestState);
+    }
+
+    private static boolean isTestStateOrImplementorOfTestState(Field field) {
+        return List.of(field.getType().getInterfaces()).contains(TestState.class) ||
+                TestState.class.equals(field.getType());
     }
 
     private static Object extractFieldFromClass(Field field, Object testInstance) {
@@ -34,8 +40,7 @@ public class TestStateExtractor {
             field.setAccessible(true);
             return field.get(testInstance);
         } catch (IllegalAccessException e) {
-            //TODO: can't test this without extracting and mocking field? likelihood hood never happens?
-            return null;
+            return null; //TODO: can't test this because field is final
         }
     }
 }

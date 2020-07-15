@@ -44,13 +44,13 @@ class HtmlTemplateBuilderTest {
 
     @Test
     void resultContainsSpecifiedElementInput() {
-        HtmlTemplateBuilder template = htmlTemplate().withElement(div(content("SomeDivContent")));
+        HtmlTemplateBuilder template = htmlTemplate().withBodyElement(div(content("SomeDivContent")));
         assertThat(template.build()).contains("<div>SomeDivContent</div>");
     }
 
     @Test
     void resultContainsAllElements() {
-        HtmlTemplateBuilder template = htmlTemplate().withElements(Arrays.asList(div(content("one")),div(content("two"))));
+        HtmlTemplateBuilder template = htmlTemplate().withBodyElements(Arrays.asList(div(content("one")),div(content("two"))));
         assertThat(template.build()).contains("<div>one</div><div>two</div>");
     }
 }

@@ -1,9 +1,11 @@
 package extension.helpers;
 
-import extension.test.TestState;
+import extension.test.state.DefaultTestState;
+import extension.test.state.TestState;
 import org.junit.jupiter.api.Test;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -12,8 +14,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 class TestStateExtractorTest {
 
     @Test
-    void returnsTestStateWhenClassHasAPrivatelyDeclaredFinalTestState() {
-        Optional<TestState> optionalTestState = TestStateExtractor.getOptionalTestStateFrom(new StubClassWithTestState());
+    void returnsTestStateWhenClassHasAPrivatelyDeclaredFinalDefaultTestState() {
+        Optional<TestState> optionalTestState = TestStateExtractor.getOptionalTestStateFrom(new StubClassWithDefaultTestState());
+        assertThat(optionalTestState).isNotEmpty();
+    }
+
+    @Test
+    void returnsTestStateWhenClassHasImplementationOfTestState() {
+        Optional<TestState> optionalTestState = TestStateExtractor.getOptionalTestStateFrom(new StubClassWithImplemetedTestState());
         assertThat(optionalTestState).isNotEmpty();
     }
 
@@ -49,7 +57,7 @@ class TestStateExtractorTest {
 
     class StubClassWithNestedTestState extends AnotherStubClass { }
 
-    class AnotherStubClass extends StubClassWithTestState { }
+    class AnotherStubClass extends StubClassWithDefaultTestState { }
 
     class StubEmptyTestStateClass {
         private TestState testState;
@@ -58,18 +66,22 @@ class TestStateExtractorTest {
     class StubClassWithNoTestState {
     }
 
-    class StubClassWithTestState {
+    class StubClassWithDefaultTestState {
+        private final TestState someState = new DefaultTestState();
+    }
 
-        private final TestState someState = new TestState() { //TODO: replace with implementation
+    class StubClassWithImplemetedTestState {
+        private final TestState someState = new TestState() {
             @Override
-            public void putOrAddInteresting(String key, Object value) { }
+            public void addInteresting(String key, Object... value) {
+
+            }
 
             @Override
-            public Map<String, Object> getInterestings() {
+            public List<Map.Entry<String, List<Object>>> getInterestingEntryList() {
                 return null;
             }
         };
-
     }
 
 }

@@ -1,16 +1,23 @@
 package extension.test;
 
+import extension.test.state.DefaultTestState;
+import extension.test.state.TestState;
 import org.junit.jupiter.api.Test;
 
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
+import static extension.test.TestMethodData.testMethodData;
 import static org.assertj.core.api.Assertions.assertThat;
 
 
 class TestMethodDataTest {
 
+    private static final TestState TEST_STATE = new DefaultTestState();
+
     private final TestMethodSourceCode actualTestMethodSourceCode = new TestMethodSourceCode("sourceCode");
-    private final TestMethodData actualTestMethodData = new TestMethodData("name", actualTestMethodSourceCode, TestResult.PASSED);
+    private final TestMethodData actualTestMethodData = testMethodData("name", actualTestMethodSourceCode);
 
     @Test
     void getNameReturnsCorrectly() {
@@ -24,60 +31,51 @@ class TestMethodDataTest {
 
     @Test
     void getTestResultReturnsCorrectly() {
-        assertThat(actualTestMethodData.getResult()).isEqualTo(TestResult.PASSED);
+        assertThat(actualTestMethodData.getResult()).isEqualTo(TestResult.NOT_RUN);
     }
 
     @Test
     void updateResultChangesTestMethodDataResult() {
-        final TestMethodData testMethodData = new TestMethodData("name", new TestMethodSourceCode("sc"), TestResult.NOT_RUN);
+        final TestMethodData testMethodData = testMethodData("name", new TestMethodSourceCode("sc"));
         testMethodData.updateResult(TestResult.FAILED);
         assertThat(testMethodData.getResult()).isEqualTo(TestResult.FAILED);
     }
 
     @Test
     void testStateByDefaultIsEmpty() {
-        final TestMethodData testMethodData = new TestMethodData("name", new TestMethodSourceCode("sc"), TestResult.NOT_RUN);
+        final TestMethodData testMethodData = testMethodData("name", new TestMethodSourceCode("sc"));
         assertThat(testMethodData.getOptionalState()).isEmpty();
     }
 
     @Test //TODO: repurpose this to process and return individual things from TestState (i.e List<CapturedInputs>, List<InterestingGivens>)?
     void updateTestStatePopulatesTestState() {
-        final TestMethodData testMethodData = new TestMethodData("name", new TestMethodSourceCode("sc"), TestResult.NOT_RUN);
+        final TestMethodData testMethodData = testMethodData("name", new TestMethodSourceCode("sc"));
         testMethodData.updateState(TEST_STATE);
         assertThat(testMethodData.getOptionalState().get()).isEqualTo(TEST_STATE);
     }
 
     @Test
     void testMethodDataIsEqualsWhenAllValuesAreTheSame() {
-        TestMethodData expected = new TestMethodData("name", new TestMethodSourceCode("sourceCode"), TestResult.PASSED);
+        TestMethodData expected = testMethodData("name", new TestMethodSourceCode("sourceCode"));
         assertThat(actualTestMethodData).isEqualTo(expected);
     }
 
     @Test
-    void testMethodDataIsNotEqualsWhenTheTestMethodNameDiffers() {
-        TestMethodData expected = new TestMethodData("differentName", new TestMethodSourceCode("sourceCode"), TestResult.PASSED);
+    void testMethodDataIsNotEqualsWhenTheMethodNameIsDifferent() {
+        TestMethodData expected = testMethodData("differentName", new TestMethodSourceCode("sourceCode"));
         assertThat(actualTestMethodData).isNotEqualTo(expected);
     }
 
     @Test
-    void testMethodDataIsNotEqualsWhenTheTestResultDiffers() {
-        TestMethodData expected = new TestMethodData("name", new TestMethodSourceCode("sourceCode"), TestResult.FAILED);
+    void testMethodDataIsNotEqualsWhenTheTestResultIsDifferent() {
+        TestMethodData expected = testMethodData("name", new TestMethodSourceCode("sourceCode"));
+        expected.updateResult(TestResult.FAILED);
         assertThat(actualTestMethodData).isNotEqualTo(expected);
     }
 
     @Test
-    void testMethodDataIsNotEqualsWhenTheTestMethodSourceCodeDiffers() {
-        TestMethodData expected = new TestMethodData("name", new TestMethodSourceCode("differentSourceCode"), TestResult.PASSED);
+    void testMethodDataIsNotEqualsWhenTheMethodSourceCodeIsDifferent() {
+        TestMethodData expected = testMethodData("name", new TestMethodSourceCode("differentSourceCode"));
         assertThat(actualTestMethodData).isNotEqualTo(expected);
     }
-
-    private static final TestState TEST_STATE = new TestState() {
-        @Override
-        public void putOrAddInteresting(String key, Object value) {}
-
-        @Override
-        public Map<String, Object> getInterestings() {
-            return null;
-        }
-    };
 }

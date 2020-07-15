@@ -17,12 +17,12 @@ public class HtmlTemplateBuilder {
         return this;
     }
 
-    public HtmlTemplateBuilder withElement(HtmlValue element) {
+    public HtmlTemplateBuilder withBodyElement(HtmlValue element) {
         this.elements.add(element);
         return this;
     }
 
-    public HtmlTemplateBuilder withElements(List<HtmlValue> elements) {
+    public HtmlTemplateBuilder withBodyElements(List<HtmlValue> elements) {
         this.elements.addAll(elements);
         return this;
     }

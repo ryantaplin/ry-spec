@@ -2,7 +2,7 @@ package extension.report.parser.html.css;
 
 import java.util.Objects;
 
-class CssElement {
+public abstract class CssElement {
 
     private String attribute;
     private String value;

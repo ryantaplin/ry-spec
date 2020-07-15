@@ -1,7 +1,7 @@
 package extension.report;
 
 import extension.test.TestSpecimen;
-import extension.report.parser.ReportParser;
+import extension.report.parser.ReportGenerator;
 import extension.test.resources.StubClassWithATestMethod;
 import helpers.TestReportRetriever;
 import org.junit.jupiter.api.AfterAll;
@@ -15,14 +15,14 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class HtmlReportGeneratorTest {
+public class ReportFileWriterTest {
 
-    private final ReportParser parser = mock(ReportParser.class);
-    private final HtmlReportGenerator testClass = new HtmlReportGenerator(parser);
+    private final ReportGenerator parser = mock(ReportGenerator.class);
+    private final ReportFileWriter testClass = new ReportFileWriter(parser);
 
     @BeforeEach
     void setUp() {
-        when(parser.parse(any(TestSpecimen.class))).thenReturn("testClass");
+        when(parser.generateForSpecimen(any(TestSpecimen.class))).thenReturn("testClass");
     }
 
     @AfterAll
@@ -32,7 +32,7 @@ public class HtmlReportGeneratorTest {
 
     @Test
     void reportDirectoryAndFileIsCreatedIfItDoesNotExist() throws IOException {
-        testClass.generate(TestSpecimen.initializeForClass(StubClassWithATestMethod.class));
+        testClass.write(TestSpecimen.initializeForClass(StubClassWithATestMethod.class));
 
         assertThat(TestReportRetriever.getReport("unknownDirectory/unknownFileName")).isNotNull();
         assertThat(TestReportRetriever.getReport("stubbed/testClass").asString()).contains("testClass");

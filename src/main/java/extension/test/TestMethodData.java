@@ -1,27 +1,31 @@
 package extension.test;
 
+import extension.test.state.TestState;
+
 import java.util.Objects;
 import java.util.Optional;
 
+import static extension.test.TestResult.NOT_RUN;
+
 public class TestMethodData {
 
-    private String testMethodName;
-    private TestMethodSourceCode testMethodSourceCode;
-    private TestResult testResult;
+    private final String methodName;
+    private final TestMethodSourceCode methodSourceCode;
+    private TestResult testResult = NOT_RUN;
+
     private TestState testState;
 
-    //private TestMethodInteractions;
-    //private TestMethodCaptures;
-    //... TODO: testState
+    private TestMethodData(String methodName, TestMethodSourceCode methodSourceCode) {
+        this.methodName = methodName;
+        this.methodSourceCode = methodSourceCode;
+    }
 
-    public TestMethodData(String testMethodName, TestMethodSourceCode testMethodSourceCode, TestResult testResult) {
-        this.testMethodName = testMethodName;
-        this.testMethodSourceCode = testMethodSourceCode;
-        this.testResult = testResult;
+    public static TestMethodData testMethodData(String methodName, TestMethodSourceCode methodSourceCode) {
+        return new TestMethodData(methodName, methodSourceCode);
     }
 
     public String getName() {
-        return testMethodName;
+        return methodName;
     }
 
     public TestResult getResult() {
@@ -29,7 +33,7 @@ public class TestMethodData {
     }
 
     public TestMethodSourceCode getSourceCode() {
-        return testMethodSourceCode;
+        return methodSourceCode;
     }
 
     public void updateResult(TestResult testResult) {
@@ -49,8 +53,8 @@ public class TestMethodData {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         TestMethodData that = (TestMethodData) o;
-        return testMethodName.equals(that.testMethodName) &&
-                Objects.equals(testMethodSourceCode, that.testMethodSourceCode) &&
+        return methodName.equals(that.methodName) &&
+                Objects.equals(methodSourceCode, that.methodSourceCode) &&
                 testResult == that.testResult;
     }
 }

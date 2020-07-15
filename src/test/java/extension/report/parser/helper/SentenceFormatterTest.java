@@ -11,11 +11,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class SentenceFormatterTest {
 
-    private final SentenceFormatter sentenceFormatter = new SentenceFormatter();
+    private final CamelCaseSplitter camelCaseSplitter = new CamelCaseSplitter();
+    private final SentenceFormatter sentenceFormatter = new SentenceFormatter(camelCaseSplitter);
 
     @Test
     void firstCharacterOfInputIsCapitalised() {
-        assertThat(sentenceFormatter.format("theQuick")).startsWith("Thequick");
+        assertThat(sentenceFormatter.format("theQuick")).startsWith("The quick");
     }
 
     @ParameterizedTest(name = "\"{0}\" should be formatted as \"{1}\"")

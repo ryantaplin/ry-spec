@@ -1,28 +1,29 @@
 package extension.report;
 
+import extension.report.parser.ReportGenerator;
 import extension.test.TestSpecimen;
-import extension.report.parser.ReportParser;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 
-public class HtmlReportGenerator implements ReportGenerator {
+public class ReportFileWriter {
 
     private static final String BASE_REPORT_LOCATION = "target";
     private static final String DEFAULT_REPORTS_LOCATION = "reports";
 
-    private final ReportParser reportParser;
+    private final ReportGenerator reportGenerator;
 
-    public HtmlReportGenerator(ReportParser reportParser) {
-        this.reportParser = reportParser;
+    //TODO: abstract the report generation away from the file writer. -> maybe wrap the String result to Report and pass in.
+    public ReportFileWriter(ReportGenerator reportGenerator) {
+        this.reportGenerator = reportGenerator;
     }
 
-    public void generate(TestSpecimen specimen) {
+    public void write(TestSpecimen specimen) {
         File file = createFileIfNotPresent(getReportPathForSpecimen(specimen.getClassPath()));
         try (FileWriter fileWriter = new FileWriter(file)) {
-            fileWriter.write(reportParser.parse(specimen));
+            fileWriter.write(reportGenerator.generateForSpecimen(specimen));
         } catch (IOException e) {
             e.printStackTrace(); //TODO: better exception handling
         }

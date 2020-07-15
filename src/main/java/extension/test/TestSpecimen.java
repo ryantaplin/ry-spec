@@ -1,11 +1,9 @@
 package extension.test;
 
 import extension.helpers.TestMethodExtractor;
+import extension.test.state.TestState;
 
 import java.util.*;
-
-//TODO: refactor out
-
 
 public class TestSpecimen {
 
@@ -32,7 +30,7 @@ public class TestSpecimen {
         return classPath;
     }
 
-    public List<TestMethodData> getTestMethodData() {
+    public List<TestMethodData> getTestMethodDataList() {
         return new ArrayList<>(methodDataMap.values());
     }
 

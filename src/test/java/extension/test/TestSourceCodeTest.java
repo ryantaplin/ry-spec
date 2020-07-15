@@ -17,7 +17,6 @@ class TestSourceCodeTest {
     @Test
     void readSuccessfullyReturnsTestSourceCode() {
         final TestPath emptyStubClass = TestPath.forClass(EmptyStubClass.class);
-
         TestSourceCode actualSourceCode = TestSourceCode.read(emptyStubClass).orElseThrow();
         assertThat(actualSourceCode.asString()).isEqualTo(EXPECTED_EMPTY_STUB_CLASS_SOURCE_CODE);
     }
@@ -43,7 +42,7 @@ class TestSourceCodeTest {
 
     //TODO: this will change - NoContents, 1LineContents, MultiLineContents
     @Test
-    void extractSuccessfullyExtractMethodContents() throws Exception {
+    void successfullyExtractMethodContents() throws Exception {
         final TestPath testPath = forClass(StubClassWithATestMethod.class);
         final TestSourceCode sourceCode = TestSourceCode.read(testPath).orElseThrow();
 

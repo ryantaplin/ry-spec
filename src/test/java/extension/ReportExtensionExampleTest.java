@@ -1,11 +1,12 @@
 package extension;
 
-import extension.test.TestState;
+import extension.test.state.DefaultTestState;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -13,31 +14,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class ReportExtensionExampleTest {
 
     public static final String CHICKEN = "Chicken";
-    public static final String DONKEY = "Donkey";
+    public static final String RABBIT = "Rabbit";
+    public static final String PIG = "Pig";
 
-    public TestState testState = new TestState() {
-//        List<String> x = new ArrayList<>();
-        Map<String, Object> x = new HashMap<>();
-
-
-        @Override
-        public void putOrAddInteresting(String key, Object value) {
-            if (this.x.containsKey(key)) {
-                Object o = x.get(key);
-                if (o instanceof List) {
-                    ((List) o).add(value);
-                } else {
-                    x.put(key, Arrays.asList(o, value));
-                }
-            }
-            this.x.put(key, value);
-        }
-
-        @Override
-        public Map<String, Object> getInterestings() {
-            return x;
-        }
-    };
+    public DefaultTestState testState = new DefaultTestState();
 
     @Test
     void somethingFail() {
@@ -49,11 +29,13 @@ public class ReportExtensionExampleTest {
         givenWeOwnA(EMPTY_FARM);
 
         whenWeDoSomething(likeAdd(CHICKEN));
-        andSomethingElse(likeAdd(DONKEY));
+        andSomethingElse(likeAdd(RABBIT));
+        andSomethingElse(likeAdd(PIG));
 
         assertThat(FARM)
                 .contains(CHICKEN)
-                .contains(DONKEY);
+                .contains(RABBIT)
+                .contains(PIG);
     }
 
     private List<String> EMPTY_FARM = new ArrayList<>();
@@ -64,7 +46,7 @@ public class ReportExtensionExampleTest {
     }
 
     private String likeAdd(String x) {
-        this.testState.putOrAddInteresting("Animals", x);
+        this.testState.addInteresting("Farm Animals", x);
         this.FARM.add(x);
         return x;
     }

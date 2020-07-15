@@ -1,52 +1,64 @@
 package extension.report.parser.html.css.helper;
 
+import extension.report.parser.html.css.CssElements;
+import extension.report.parser.html.css.CssColour;
+import extension.report.parser.html.css.CssPosition;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.MethodSource;
 
-import java.util.stream.Stream;
-
-import static org.assertj.core.api.Assertions.assertThat;
+import static extension.report.parser.html.css.CssBackgroundColour.backgroundColour;
+import static extension.report.parser.html.css.CssBorder.border;
+import static extension.report.parser.html.css.CssMargin.margin;
+import static extension.report.parser.html.css.CssPadding.padding;
+import static helpers.assertions.CssAssertions.assertThatCss;
 
 class TestContentCssHelperTest {
 
     private final TestContentCssHelper helper = new TestContentCssHelper();
 
-    @ParameterizedTest(name = "Expecting header to contain attribute \"{0}\"")
-    @MethodSource("headerAttributeValues")
-    void headerCssContainsExpectedAttributes(String attributeValue) {
-        String cssBuilder = helper.headerCss().asString();
-
-        assertThat(cssBuilder).contains(attributeValue);
+    @Test
+    void headerCssContainsExpectedAttributes() {
+        CssElements cssElements = helper.headerCss();
+        assertThatCss(cssElements).containsExactlyInAnyOrder(
+                backgroundColour(CssColour.BLUE),
+                border(1, CssPosition.BOTTOM),
+                padding(1, 1, 1, 1)
+        );
     }
 
     @Test
-    void bodyCssContainsExpectedAttributes() {
-        String cssBuilder = helper.bodyCss().asString();
-        assertThat(cssBuilder).contains("padding:2px 2px 2px 2px");
+    void sourceCodeCssContainsExpectedAttributes() {
+        CssElements cssElements = helper.sourceCodeCss();
+        assertThatCss(cssElements)
+                .containsExactlyInAnyOrder(
+                        border(1),
+                        margin(10, 10, 0, 10),
+                        padding(5, 5, 5, 5)
+                );
     }
 
-    @ParameterizedTest(name = "Expecting css container to contain attribute \"{0}\"")
-    @MethodSource("cssAttributeValues")
-    void containerCssContainsExpectedAttributes(String attributeValue) {
-        String cssBuilder = helper.containerCss().asString();
-        assertThat(cssBuilder).contains(attributeValue);
-    }
-
-    private static Stream<Arguments> cssAttributeValues() {
-        return Stream.of(
-                Arguments.of("margin:5px 5px 5px 5px"),
-                Arguments.of("border:1px solid black")
+    @Test
+    void containerCssContainsExpectedAttributes() {
+        CssElements cssElements = helper.containerCss();
+        assertThatCss(cssElements).containsExactlyInAnyOrder(
+                margin(5, 5, 5, 5),
+                border(1)
         );
     }
 
-    private static Stream<Arguments> headerAttributeValues() {
-        return Stream.of(
-                Arguments.of("background-color:#70e1e1"),
-                Arguments.of("border-bottom:1px solid black"),
-                Arguments.of("padding:1px 1px 1px 1px")
+    @Test
+    void capturedInterestingElementCssContainsExpectedAttributes() {
+        CssElements cssElements = helper.capturedInterestingElementCss();
+        assertThatCss(cssElements).containsExactlyInAnyOrder(
+                margin(0, 10, 10, 10),
+                padding(2, 2, 2, 2)
         );
     }
 
+    @Test
+    void emptyDivPaddingContainsExpectedAttributes() {
+        CssElements cssElements = helper.emptyDivPadding();
+        assertThatCss(cssElements).containsExactlyInAnyOrder(
+                margin(5, 2, 10, 2)
+        );
+    }
 }

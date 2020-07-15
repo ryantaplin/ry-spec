@@ -22,6 +22,10 @@ public class TestSourceCode {
        return Optional.empty();
     }
 
+    public static TestSourceCode empty() {
+        return new TestSourceCode("");
+    }
+
     public TestMethodSourceCode extract(Method method) {
         String sourceSubStringFromMethodName = sourceCode.substring(sourceCode.indexOf(method.getName()));
         String methodSourceCode = recursiveExtracting(sourceSubStringFromMethodName.split("\n"), 0, 0, false);

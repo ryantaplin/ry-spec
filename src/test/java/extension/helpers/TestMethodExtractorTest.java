@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
+import static extension.test.TestMethodData.testMethodData;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class TestMethodExtractorTest {
@@ -22,15 +23,16 @@ class TestMethodExtractorTest {
     @Test
     void returnsTestMethodWhenClassContainsATestMethod() {
         List<TestMethodData> testMethods = TestMethodExtractor.getTestMethods(StubClassWithATestMethod.class);
-        assertThat(testMethods).contains(new TestMethodData(METHOD_NAME, METHOD_SOURCE_CODE, TestResult.NOT_RUN));
+        assertThat(testMethods).contains(testMethodData(METHOD_NAME, METHOD_SOURCE_CODE));
     }
 
     @Test
     void returnsTestMethodsWhenClassContainsMultipleTestMethods() {
         List<TestMethodData> testMethods = TestMethodExtractor.getTestMethods(StubClassWithMultipleTestMethods.class);
         assertThat(testMethods).containsExactlyInAnyOrder(
-                new TestMethodData(METHOD_NAME, METHOD_SOURCE_CODE, TestResult.NOT_RUN),
-                new TestMethodData(ANOTHER_METHOD_NAME, ANOTHER_METHOD_SOURCE_CODE, TestResult.NOT_RUN));
+                testMethodData(METHOD_NAME, METHOD_SOURCE_CODE),
+                testMethodData(ANOTHER_METHOD_NAME, ANOTHER_METHOD_SOURCE_CODE)
+        );
     }
 
     @Test

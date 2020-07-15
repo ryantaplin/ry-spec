@@ -9,27 +9,22 @@ class CamelCaseSplitterTest {
     private final CamelCaseSplitter camelCaseSplitter = new CamelCaseSplitter();
 
     @Test
+    void stringWithNoCamelCaseIsNotTransformed() {
+        assertThat(camelCaseSplitter.split("somesentence")).isEqualTo("somesentence");
+    }
+
+    @Test
     void allCamelCasedWordsAreSeparateByASpace() {
         assertThat(camelCaseSplitter.split("someSentence")).contains("some Sentence");
     }
 
     @Test
-    void removesLeadingSpaces() {
-        assertThat(camelCaseSplitter.split("   someSentence")).isEqualTo("some Sentence");
-    }
-
-    @Test
-    void removesTrailingSpaces() {
-        assertThat(camelCaseSplitter.split("someSentence   ")).isEqualTo("some Sentence");
-    }
-
-    @Test
-    void removesMultipleSpacesBetweenWords() {
-        assertThat(camelCaseSplitter.split("some   Very LongUnformattedSentence")).isEqualTo("some Very Long Unformatted Sentence");
-    }
-
-    @Test
     void doesNotThrowExceptionWhenNullIsInput() {
         assertThat(camelCaseSplitter.split(null)).isEqualTo("");
+    }
+
+    @Test
+    void doesNotThrowExceptionWhenEmptyStringIsInput() {
+        assertThat(camelCaseSplitter.split("")).isEqualTo("");
     }
 }
