@@ -1,6 +1,7 @@
 package extension.report;
 
 import extension.report.parser.ReportGenerator;
+import extension.test.TestPath;
 import extension.test.TestSpecimen;
 
 import java.io.File;
@@ -11,6 +12,8 @@ import java.nio.file.Files;
 public class ReportFileWriter {
 
     private static final String BASE_REPORT_LOCATION = "target";
+
+    //TODO: make this a property that can be configured
     private static final String DEFAULT_REPORTS_LOCATION = "reports";
 
     private final ReportGenerator reportGenerator;
@@ -21,7 +24,7 @@ public class ReportFileWriter {
     }
 
     public void write(TestSpecimen specimen) {
-        File file = createFileIfNotPresent(getReportPathForSpecimen(specimen.getClassPath()));
+        File file = createFileIfNotPresent(getReportPathForSpecimen(specimen.getTestPath()));
         try (FileWriter fileWriter = new FileWriter(file)) {
             fileWriter.write(reportGenerator.generateForSpecimen(specimen));
         } catch (IOException e) {
@@ -29,8 +32,8 @@ public class ReportFileWriter {
         }
     }
 
-    private String getReportPathForSpecimen(String specimenClassPath) {
-        String result = String.format("%s/%s/%s.html", BASE_REPORT_LOCATION, getReportsLocation(), specimenClassPath);
+    private String getReportPathForSpecimen(TestPath path) {
+        String result = String.format("%s/%s/%s", BASE_REPORT_LOCATION, DEFAULT_REPORTS_LOCATION, path.forReport());
         System.out.println(result);
         return result;
     }
@@ -43,10 +46,5 @@ public class ReportFileWriter {
             e.printStackTrace(); //TODO: better exception handling
         }
         return file;
-    }
-
-    private static String getReportsLocation() {
-        //TODO: make this a property that can be configured
-        return DEFAULT_REPORTS_LOCATION;
     }
 }

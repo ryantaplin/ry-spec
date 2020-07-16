@@ -15,18 +15,21 @@ public class TestPath {
 
     //TODO: Extract testDirectory out - may need to be a property
     public static TestPath forClass(Class<?> clazz) {
-        return new TestPath(
-                getPathAsStringFor(clazz).orElse("")
-        );
+        return new TestPath(getPathAsStringFor(clazz).orElse(""));
     }
 
-    public Path asPath() throws Exception {
-        return Optional.of(Paths.get(value))
+    public Path forSourceCode() throws Exception {
+        String sourcePath = String.format("src/test/java/%s.java", value);
+        return Optional.of(Paths.get(sourcePath))
                 .filter(p -> Files.exists(p))
-                .orElseThrow(() -> new Exception(String.format("%s does not exist.", asString())));
+                .orElseThrow(() -> new Exception(String.format("%s does not exist.", sourcePath)));
     }
 
-    public String asString() {
+    public String forReport() {
+        return String.format("%s.html", value);
+    }
+
+    public String asRawString() {
         return value;
     }
 
@@ -34,8 +37,7 @@ public class TestPath {
         //TODO: clazz.getProtectedDomain() for full url?
         return Optional.ofNullable(clazz)
                 .flatMap(TestPath::getName)
-                .map(name -> name.replaceAll("\\.", "/"))
-                .map(name -> String.format("src/test/java/%s.java", name));
+                .map(name -> name.replaceAll("\\.", "/"));
     }
 
     private static Optional<String> getName(Class<?> clazz) {

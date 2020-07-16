@@ -7,11 +7,11 @@ import java.util.*;
 
 public class TestSpecimen {
 
-    private final String classPath;
+    private final TestPath testPath;
     private final HashMap<String, TestMethodData> methodDataMap = new HashMap<>();
 
     private TestSpecimen(Class<?> specimen) {
-        this.classPath = TestPath.forClass(specimen).asString();
+        this.testPath = TestPath.forClass(specimen);
         for (TestMethodData testMethodDataEntry : TestMethodExtractor.getTestMethods(specimen)) {
             methodDataMap.put(testMethodDataEntry.getName(), testMethodDataEntry);
         }
@@ -26,8 +26,8 @@ public class TestSpecimen {
                 .ifPresent(x -> x.updateResult(testResult));
     }
 
-    public String getClassPath() {
-        return classPath;
+    public TestPath getTestPath() {
+        return testPath;
     }
 
     public List<TestMethodData> getTestMethodDataList() {

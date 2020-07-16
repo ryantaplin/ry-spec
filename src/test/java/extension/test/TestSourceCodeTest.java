@@ -24,7 +24,7 @@ class TestSourceCodeTest {
     @Test
     void readReturnsEmptyWhenPathReturnsEmpty() throws Exception {
         final TestPath emptyTestPath = mock(TestPath.class);
-        when(emptyTestPath.asPath()).thenThrow(new Exception("Boom!"));
+        when(emptyTestPath.forSourceCode()).thenThrow(new Exception("Boom!"));
         assertThat(TestSourceCode.read(emptyTestPath)).isEmpty();  //TODO: Logging test
     }
 

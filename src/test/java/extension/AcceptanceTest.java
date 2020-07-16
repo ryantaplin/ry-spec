@@ -1,5 +1,5 @@
 package extension;
 
-@ReportGenerator
+@ReportGenerator(loggingEnabled = true)
 public class AcceptanceTest {
 }

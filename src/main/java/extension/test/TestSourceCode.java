@@ -8,14 +8,13 @@ public class TestSourceCode {
 
     private String sourceCode;
 
-
     TestSourceCode(String sourceCode) {
         this.sourceCode = sourceCode;
     }
 
     public static Optional<TestSourceCode> read(TestPath testPath) {
         try {
-            return Optional.of(new TestSourceCode(String.join("\n", Files.readAllLines(testPath.asPath()))));
+            return Optional.of(new TestSourceCode(String.join("\n", Files.readAllLines(testPath.forSourceCode()))));
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -1,8 +1,8 @@
 package extension.report;
 
+import extension.test.TestPath;
 import extension.test.TestSpecimen;
 import extension.report.parser.ReportGenerator;
-import extension.test.resources.StubClassWithATestMethod;
 import helpers.TestReportRetriever;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,8 +20,15 @@ public class ReportFileWriterTest {
     private final ReportGenerator parser = mock(ReportGenerator.class);
     private final ReportFileWriter testClass = new ReportFileWriter(parser);
 
+    private final TestSpecimen testSpecimen = mock(TestSpecimen.class);
+
     @BeforeEach
     void setUp() {
+        //TODO: cleanup incase residual is left from previous test runs
+
+        final TestPath testPath = mock(TestPath.class);
+        when(testPath.forReport()).thenReturn("stubbed/testClass.html");
+        when(testSpecimen.getTestPath()).thenReturn(testPath);
         when(parser.generateForSpecimen(any(TestSpecimen.class))).thenReturn("testClass");
     }
 
@@ -32,9 +39,8 @@ public class ReportFileWriterTest {
 
     @Test
     void reportDirectoryAndFileIsCreatedIfItDoesNotExist() throws IOException {
-        testClass.write(TestSpecimen.initializeForClass(StubClassWithATestMethod.class));
-
-        assertThat(TestReportRetriever.getReport("unknownDirectory/unknownFileName")).isNotNull();
-        assertThat(TestReportRetriever.getReport("stubbed/testClass").asString()).contains("testClass");
+        testClass.write(testSpecimen);
+        assertThat(TestReportRetriever.getReport("stubbed/testClass").asString())
+                .contains("testClass");
     }
 }

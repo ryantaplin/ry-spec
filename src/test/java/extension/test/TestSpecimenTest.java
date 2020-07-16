@@ -21,7 +21,8 @@ class TestSpecimenTest {
     @Test
     void getClassPathReturnsClassPathValue() {
         TestSpecimen testClass = TestSpecimen.initializeForClass(StubClassWithATestMethod.class);
-        assertThat(testClass.getClassPath()).isEqualTo("src/test/java/extension/test/resources/StubClassWithATestMethod.java");
+        assertThat(testClass.getTestPath().forReport())
+                .isEqualTo("extension/test/resources/StubClassWithATestMethod.html");
     }
 
     @Test

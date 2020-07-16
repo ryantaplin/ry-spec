@@ -1,6 +1,7 @@
 package extension.report.parser;
 
 import extension.report.parser.helper.SentenceFormatter;
+import extension.test.TestPath;
 import extension.test.TestSpecimen;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,6 +20,7 @@ import static org.mockito.Mockito.when;
 class HtmlReportGeneratorTest {
 
     private final TestSpecimen testSpecimen = mock(TestSpecimen.class);
+    private final TestPath testPath = mock(TestPath.class);
 
     private final SentenceFormatter sentenceFormatter = mock(SentenceFormatter.class);
     private final TestSpecimenToHtmlWorker worker = mock(TestSpecimenToHtmlWorker.class);
@@ -27,7 +29,8 @@ class HtmlReportGeneratorTest {
 
     @BeforeEach
     void setUp() {
-        when(testSpecimen.getClassPath()).thenReturn("stubTestClassPath");
+        when(testPath.asRawString()).thenReturn("stubTestClassPath");
+        when(testSpecimen.getTestPath()).thenReturn(testPath);
         final Answer<String> withInput = invocation -> {
             Object[] args = invocation.getArguments();
             return (String) args[0];
@@ -60,24 +63,4 @@ class HtmlReportGeneratorTest {
         String actual = htmlReportGenerator.generateForSpecimen(testSpecimen);
         assertThat(actual).contains("<div>someContent</div><div>moreContent</div>");
     }
-
-
-    //    @Test
-//    void reportParserIncludesReportBuilderMethodNames() {
-//        String actual = htmlReportGenerator.generateForSpecimen(testSpecimen);
-//        assertThat(actual).contains("stubMethodName1", "stubMethodName2", "stubMethodName3");
-//    }
-
-//    @Test
-//    void reportParserIncludesReportBuilderMethodNameSourceCodes() {
-//        String actual = htmlReportGenerator.generateForSpecimen(testSpecimen);
-//        assertThat(actual).contains("stubMethodSourceCode1", "stubMethodSourceCode2", "stubMethodSourceCode3");
-//    }
-
-//    @Test
-//    void reportParserIncludesReportBuilderMethodResults() {
-//        String actual = htmlReportGenerator.generateForSpecimen(testSpecimen);
-//        assertThat(actual).contains("NOT_RUN", "PASSED", "FAILED");
-//    }
-
 }

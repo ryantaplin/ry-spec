@@ -1,7 +1,6 @@
 package extension.report.parser;
 
 import extension.report.parser.helper.SentenceFormatter;
-import extension.report.parser.html.HtmlValue;
 import extension.report.parser.html.css.CssElements;
 import extension.report.parser.html.css.CssPosition;
 import extension.report.parser.html.element.DivElement;
@@ -28,7 +27,7 @@ public class HtmlReportGenerator implements ReportGenerator {
     }
 
     public String generateForSpecimen(TestSpecimen specimen) {
-        String reportPageName = formatPageTitle(specimen.getClassPath());
+        String reportPageName = formatPageTitle(specimen.getTestPath().asRawString());
         return htmlTemplate()
                 .withTitle(reportPageName)
                 .withBodyElement(titleDiv(reportPageName))
