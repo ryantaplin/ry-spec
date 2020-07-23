@@ -43,7 +43,7 @@ public class TestStateToHtmlParser {
 
     private HtmlElement toKeyValuesMapping(Map.Entry<String, List<Object>> entry) {
         return div(
-                content(entry.getKey()),
+                content(entry.getKey() + ": "),
                 content(entry.getValue().stream()
                         .map(Object::toString) //TODO: custom object parsing
                         .collect(Collectors.joining(", ")))

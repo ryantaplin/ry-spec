@@ -13,7 +13,7 @@ public class TestStateExtractor {
     public static Optional<TestState> getOptionalTestStateFrom(Object classInstance) {
         Class<?> curClass = Optional.ofNullable(classInstance).map(Object::getClass).orElse(null);
         while (curClass != null) {
-            Optional<TestState> optionalField = findDeclaredTestContainerFor(curClass)
+            Optional<TestState> optionalField = findDeclaredTestStateFor(curClass)
                     .map(field -> extractFieldFromClass(field, classInstance))
                     .map(TestState.class::cast)
                     .filter(Objects::nonNull)
@@ -25,7 +25,7 @@ public class TestStateExtractor {
         return Optional.empty();
     }
 
-    private static Stream<Field> findDeclaredTestContainerFor(Class<?> curClass) {
+    private static Stream<Field> findDeclaredTestStateFor(Class<?> curClass) {
         return Arrays.stream(curClass.getDeclaredFields())
                 .filter(TestStateExtractor::isTestStateOrImplementorOfTestState);
     }
@@ -39,7 +39,7 @@ public class TestStateExtractor {
         try {
             field.setAccessible(true);
             return field.get(testInstance);
-        } catch (IllegalAccessException e) {
+        } catch (IllegalAccessException | IllegalArgumentException e) {
             return null; //TODO: can't test this because field is final
         }
     }

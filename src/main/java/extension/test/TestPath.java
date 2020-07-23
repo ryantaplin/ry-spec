@@ -34,7 +34,6 @@ public class TestPath {
     }
 
     private static Optional<String> getPathAsStringFor(Class<?> clazz) {
-        //TODO: clazz.getProtectedDomain() for full url?
         return Optional.ofNullable(clazz)
                 .flatMap(TestPath::getName)
                 .map(name -> name.replaceAll("\\.", "/"));

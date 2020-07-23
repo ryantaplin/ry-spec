@@ -1,5 +1,6 @@
 package extension;
 
+import extension.helpers.TestAnnotationExtractor;
 import extension.helpers.TestStateExtractor;
 import extension.report.ReportFileWriter;
 import extension.report.parser.HtmlReportGenerator;
@@ -22,7 +23,7 @@ import static extension.test.TestResult.FAILED;
 import static extension.test.TestResult.PASSED;
 import static java.util.Collections.emptyList;
 
-public class ReportExtension implements Extension, BeforeAllCallback, AfterEachCallback, AfterAllCallback {
+class ReportExtension implements Extension, BeforeAllCallback, AfterEachCallback, AfterAllCallback {
 
     private final SentenceFormatter sentenceFormatter = new SentenceFormatter(new CamelCaseSplitter());
     private final SourceCodeParser sourceCodeParser = new SourceCodeParser(new ForbiddenCharacterFilter(), sentenceFormatter);
@@ -44,26 +45,10 @@ public class ReportExtension implements Extension, BeforeAllCallback, AfterEachC
 
     @Override
     public void beforeAll(ExtensionContext context) throws Exception {
-        this.annotation = context.getTestClass().flatMap(this::getOptionalReportAnnotation).orElseThrow();
+        this.annotation = context.getTestClass().map(TestAnnotationExtractor::getReportAnnotation).get();
         this.testSpecimen = context.getTestClass()
                 .map(TestSpecimen::initializeForClass)
                 .orElseThrow(() -> new Exception("TODO:"));
-    }
-
-    //TODO: extract..
-    public Optional<ReportGenerator> getOptionalReportAnnotation(Class<?> classInstance) {
-        Class<?> curClass = classInstance;
-        while (curClass != null) {
-            Optional<ReportGenerator> optionalAnnotation = Optional.of(curClass)
-                    .map(x -> Arrays.asList(x.getAnnotations())).orElse(emptyList()).stream()
-                    .filter(x -> x.annotationType().equals(ReportGenerator.class))
-                    .map(ReportGenerator.class::cast)
-                    .findFirst();
-
-            if (optionalAnnotation.isEmpty()) curClass = curClass.getSuperclass();
-            else return optionalAnnotation;
-        }
-        return Optional.empty();
     }
 
     @Override

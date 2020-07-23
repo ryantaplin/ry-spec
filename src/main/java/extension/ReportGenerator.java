@@ -13,6 +13,7 @@ import java.lang.annotation.Target;
 
 @ExtendWith(ReportExtension.class)
 public @interface ReportGenerator {
+
     //TODO: use reflection to access these fields...
     boolean loggingEnabled() default false;
 }
