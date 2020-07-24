@@ -3,7 +3,6 @@ package extension;
 import extension.test.state.DefaultTestState;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,8 +43,10 @@ public class ReportExtensionExampleTest extends AcceptanceTest {
         this.FARM = this.EMPTY_FARM;
     }
 
+    //TODO: what happens if i push an object of same type on the interestings? (duplicates?)
     private String likeAdd(String x) {
-        this.testState.addInteresting("Farm Animals", x);
+        this.testState.addInterestingGiven("Farm Animals", x);
+        this.testState.captureInteraction("Shop", "Farm", x);
         this.FARM.add(x);
         return x;
     }

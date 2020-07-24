@@ -6,7 +6,9 @@ import java.util.Map.Entry;
 public interface TestState {
 
     //TODO: TestMethodInteractions, TestMethodCaptures
-    void addInteresting(String key, Object... value);
-    List<Entry<String, List<Object>>> getInterestingEntryList();
+    void addInterestingGiven(String key, Object... value);
+    List<Entry<String, List<Object>>> getInterestingGivenEntries();
 
+    void captureInteraction(String sender, String receiver, Object value);
+    List<CapturedInteraction> getCapturedInteractions();
 }

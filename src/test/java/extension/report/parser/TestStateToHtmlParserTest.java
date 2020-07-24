@@ -1,14 +1,12 @@
 package extension.report.parser;
 
 import extension.report.parser.html.css.helper.TestContentCssHelper;
-import extension.report.parser.html.element.DivElement;
 import extension.report.parser.html.element.HtmlElement;
 import extension.report.parser.html.parser.TestStateToHtmlParser;
+import extension.report.parser.html.parser.teststate.CapturedInteractionsToHtmlParser;
+import extension.report.parser.html.parser.teststate.InterestingGivensToHtmlParser;
 import extension.test.state.TestState;
 import org.junit.jupiter.api.Test;
-
-import java.util.List;
-import java.util.Map;
 
 import static extension.report.parser.html.HtmlContent.content;
 import static extension.report.parser.html.element.DivElement.div;
@@ -19,75 +17,42 @@ import static org.mockito.Mockito.when;
 class TestStateToHtmlParserTest {
 
     private final TestContentCssHelper cssHelper = mock(TestContentCssHelper.class);
-    private final TestStateToHtmlParser testStateToHtmlParser = new TestStateToHtmlParser(cssHelper);
+    private final InterestingGivensToHtmlParser interestingGivensParser = mock(InterestingGivensToHtmlParser.class);
+    private final CapturedInteractionsToHtmlParser capturedInteractionsParser = mock(CapturedInteractionsToHtmlParser.class);
+    private final TestStateToHtmlParser testStateToHtmlParser = new TestStateToHtmlParser(interestingGivensParser, capturedInteractionsParser, cssHelper);
 
     private final TestState state = mock(TestState.class);
 
     @Test
-    void returnsDivElementWithInterestingKeyAndValue() {
-        when(state.getInterestingEntryList()).thenReturn(List.of(entry("key", List.of("value"))));
+    void returnsDivElementWithElementReturnedByInterestingGivensParser() {
+        when(interestingGivensParser.parse(state)).thenReturn(div(content("some-given")));
         HtmlElement result = testStateToHtmlParser.parse(state);
-        assertThatHtml(result).isEqualTo(
-                div(
-                        div(content("Interesting Givens")),
-                        div(entryWithKeyAndValues("key", "value"))
-                ));
+        assertThatHtml(result).isEqualTo(div(div(content("some-given"))));
     }
 
     @Test
-    void returnsDivElementWithAKeyAndMultipleValues() {
-        when(state.getInterestingEntryList()).thenReturn(List.of(entry("key", List.of("value", "anotherValue"))));
+    void returnsDivElementWithElementReturnedByCapturedInteractionsParser() {
+        when(capturedInteractionsParser.parse(state)).thenReturn(div(content("some-interaction")));
         HtmlElement result = testStateToHtmlParser.parse(state);
-        assertThatHtml(result).isEqualTo(
-                div(
-                        div(content("Interesting Givens")),
-                        div(entryWithKeyAndValues("key", "value", "anotherValue"))
-                ));
+        assertThatHtml(result).isEqualTo(div(div(content("some-interaction"))));
     }
 
     @Test
-    void returnsDivElementWithMultipleKeysAndValues() {
-        when(state.getInterestingEntryList()).thenReturn(List.of(
-                entry("key0", List.of("k0Avalue", "k0Bvalue")),
-                entry("key1", List.of("k1Avalue", "k1Bvalue"))
-        ));
+    void returnsDivElementWithInterestingGivensElementAndCapturedInteractionsElementInOrder() {
+        when(interestingGivensParser.parse(state)).thenReturn(div(content("some-given")));
+        when(capturedInteractionsParser.parse(state)).thenReturn(div(content("some-interaction")));
         HtmlElement result = testStateToHtmlParser.parse(state);
         assertThatHtml(result).isEqualTo(
                 div(
-                        div(content("Interesting Givens")),
-                        div(
-                                entryWithKeyAndValues("key0", "k0Avalue", "k0Bvalue"),
-                                entryWithKeyAndValues("key1", "k1Avalue", "k1Bvalue")
-                        )
-                ));
+                        div(content("some-given")),
+                        div(content("some-interaction"))
+                )
+        );
     }
 
     @Test
     void returnsEmptyDivWhenNullStateIsProvided() {
         HtmlElement result = testStateToHtmlParser.parse(null);
         assertThatHtml(result).isEqualTo(div());
-    }
-
-    private DivElement entryWithKeyAndValues(String key, String... values) {
-        return div(content(key), content(String.join(", ", values)));
-    }
-
-    private static Map.Entry<String, List<Object>> entry(String key, List<Object> value) {
-        return new Map.Entry<>() {
-            @Override
-            public String getKey() {
-                return key;
-            }
-
-            @Override
-            public List<Object> getValue() {
-                return value;
-            }
-
-            @Override
-            public List<Object> setValue(List<Object> o) {
-                return null;
-            }
-        };
     }
 }

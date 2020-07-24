@@ -22,6 +22,22 @@ class DivElementTest {
     }
 
     @Test
+    void asStringResultDoesNotIncludeNullInputs() {
+        DivElement div = div(null, div(null, content("one")), null, content("two"), null);
+        assertThat(div.asString()).isEqualTo("<div><div>one</div>two</div>");
+    }
+
+    @Test
+    void isNotEmptyReturnsFalseWhenContentListIsEmpty() {
+        assertThat(div().isNotEmpty()).isFalse();
+    }
+
+    @Test
+    void isNotEmptyReturnsTrueWhenContentListIsEmpty() {
+        assertThat(div(content("something")).isNotEmpty()).isTrue();
+    }
+
+    @Test
     void emptyDivElementsAreEqual() {
         assertThat(div()).isEqualTo(div());
     }

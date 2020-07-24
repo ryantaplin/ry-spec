@@ -26,6 +26,7 @@ class CssBorderTest {
         assertThat(result.asString())
                 .isEqualTo(String.format("style=\"%s:1px solid black\"", attributeOutput));
     }
+
     private static Stream<Arguments> inputAndOutputForBorderPosition() {
         return Stream.of(
                 Arguments.of(null, "border"),

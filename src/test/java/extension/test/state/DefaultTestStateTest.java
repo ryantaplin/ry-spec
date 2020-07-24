@@ -12,23 +12,31 @@ class DefaultTestStateTest {
     @Test
     void testStateAddsKeyAndSingleItemToMap() {
         final DefaultTestState state = new DefaultTestState();
-        state.addInteresting("single-key", "single-item");
-        assertThat(state.getInterestingEntryList()).contains(entry("single-key", List.of("single-item")));
+        state.addInterestingGiven("single-key", "single-item");
+        assertThat(state.getInterestingGivenEntries()).contains(entry("single-key", List.of("single-item")));
     }
 
     @Test
     void testStateAddsItemToExistingEntryInMap() {
         final DefaultTestState state = new DefaultTestState();
-        state.addInteresting("a-key", "first-item");
-        state.addInteresting("a-key", "second-item");
-        assertThat(state.getInterestingEntryList()).contains(entry("a-key", List.of("second-item", "first-item")));
+        state.addInterestingGiven("a-key", "first-item");
+        state.addInterestingGiven("a-key", "second-item");
+        assertThat(state.getInterestingGivenEntries()).contains(entry("a-key", List.of("second-item", "first-item")));
     }
 
     @Test
     void testStateAddsKeyWithMultipleItemsInMap() {
         final DefaultTestState state = new DefaultTestState();
-        state.addInteresting("a-key", "first-item", "second-item");
-        assertThat(state.getInterestingEntryList()).contains(entry("a-key", List.of("first-item", "second-item")));
+        state.addInterestingGiven("a-key", "first-item", "second-item");
+        assertThat(state.getInterestingGivenEntries()).contains(entry("a-key", List.of("first-item", "second-item")));
+    }
+
+    @Test
+    void testStateReturnsAddedCapturedInteractions() {
+        final DefaultTestState state = new DefaultTestState();
+        state.captureInteraction("sender", "receiver", "anyValue");
+        assertThat(state.getCapturedInteractions())
+                .containsExactly(new CapturedInteraction("sender", "receiver", "anyValue"));
     }
 
     private static Map.Entry<String, List<Object>> entry(String key, List<Object> value) {

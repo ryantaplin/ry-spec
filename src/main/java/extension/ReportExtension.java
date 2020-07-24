@@ -13,15 +13,13 @@ import extension.report.parser.html.css.helper.TestContentCssHelper;
 import extension.report.parser.html.parser.TestHeaderToHtmlParser;
 import extension.report.parser.html.parser.TestSourceCodeToHtmlParser;
 import extension.report.parser.html.parser.TestStateToHtmlParser;
+import extension.report.parser.html.parser.teststate.CapturedInteractionsToHtmlParser;
+import extension.report.parser.html.parser.teststate.InterestingGivensToHtmlParser;
 import extension.test.TestSpecimen;
 import org.junit.jupiter.api.extension.*;
 
-import java.util.Arrays;
-import java.util.Optional;
-
 import static extension.test.TestResult.FAILED;
 import static extension.test.TestResult.PASSED;
-import static java.util.Collections.emptyList;
 
 class ReportExtension implements Extension, BeforeAllCallback, AfterEachCallback, AfterAllCallback {
 
@@ -35,8 +33,13 @@ class ReportExtension implements Extension, BeforeAllCallback, AfterEachCallback
                     new TestSpecimenToHtmlWorker(
                             new TestHeaderToHtmlParser(sentenceFormatter, testContentCssHelper),
                             new TestSourceCodeToHtmlParser(sourceCodeParser, testContentCssHelper),
-                            new TestStateToHtmlParser(testContentCssHelper),
-                            testContentCssHelper)
+                            new TestStateToHtmlParser(
+                                    new InterestingGivensToHtmlParser(testContentCssHelper),
+                                    new CapturedInteractionsToHtmlParser(testContentCssHelper),
+                                    testContentCssHelper
+                            ),
+                            testContentCssHelper
+                    )
             )
     );
 

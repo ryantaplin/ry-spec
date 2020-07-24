@@ -1,5 +1,6 @@
 package extension.helpers;
 
+import extension.test.state.CapturedInteraction;
 import extension.test.state.DefaultTestState;
 import extension.test.state.TestState;
 import org.junit.jupiter.api.Test;
@@ -73,12 +74,22 @@ class TestStateExtractorTest {
     class StubClassWithImplemetedTestState {
         private final TestState someState = new TestState() {
             @Override
-            public void addInteresting(String key, Object... value) {
+            public void addInterestingGiven(String key, Object... value) {
 
             }
 
             @Override
-            public List<Map.Entry<String, List<Object>>> getInterestingEntryList() {
+            public List<Map.Entry<String, List<Object>>> getInterestingGivenEntries() {
+                return null;
+            }
+
+            @Override
+            public void captureInteraction(String sender, String receiver, Object value) {
+
+            }
+
+            @Override
+            public List<CapturedInteraction> getCapturedInteractions() {
                 return null;
             }
         };
