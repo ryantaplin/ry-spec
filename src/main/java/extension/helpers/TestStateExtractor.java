@@ -40,7 +40,7 @@ public class TestStateExtractor {
             field.setAccessible(true);
             return field.get(testInstance);
         } catch (IllegalAccessException | IllegalArgumentException e) {
-            return null; //TODO: can't test this because field is final
+            return null;
         }
     }
 }

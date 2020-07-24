@@ -15,6 +15,8 @@ public class DivElement implements HtmlElement {
 
     private final List<? extends HtmlValue> contentList;
     private Optional<CssElements> cssBuilder;
+    private String className;
+    private String onClickFunction;
 
     public DivElement(List<? extends HtmlValue> contentList) {
         this.contentList = contentList.stream().filter(Objects::nonNull).collect(Collectors.toList());
@@ -29,8 +31,21 @@ public class DivElement implements HtmlElement {
         return new DivElement(content);
     }
 
+    @Override
     public DivElement with(CssElements css) {
         this.cssBuilder = Optional.ofNullable(css);
+        return this;
+    }
+
+    @Override
+    public DivElement withClassName(String className) {
+        this.className = className;
+        return this;
+    }
+
+    @Override
+    public DivElement withOnClickFunction(String onClickFunction) {
+        this.onClickFunction = onClickFunction;
         return this;
     }
 
@@ -41,9 +56,12 @@ public class DivElement implements HtmlElement {
                 .collect(joining());
         String cssValue = cssBuilder.map(CssElements::asString).orElse("");
 
-        return String.format("<div%s>%s</div>",
-                cssValue.isEmpty() ? "" : String.format(" %s", cssValue),
-                collectedContent);
+        return String.format("<div%s%s%s>%s</div>",
+                className == null ? "" : String.format(" class=\"%s\"", className),
+                onClickFunction == null ? "" : String.format(" onClick=\"%s\"", onClickFunction),
+                cssValue.isEmpty() ? "" : " " + cssValue,
+                collectedContent
+        );
     }
 
     @Override
@@ -52,7 +70,9 @@ public class DivElement implements HtmlElement {
         if (o == null || getClass() != o.getClass()) return false;
         DivElement that = (DivElement) o;
         return Objects.equals(contentList, that.contentList) &&
-                Objects.equals(cssBuilder, that.cssBuilder);
+                Objects.equals(cssBuilder, that.cssBuilder) &&
+                Objects.equals(className, that.className) &&
+                Objects.equals(onClickFunction, that.onClickFunction);
     }
 
     public boolean isNotEmpty() {

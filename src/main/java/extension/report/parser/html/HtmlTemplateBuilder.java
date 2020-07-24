@@ -3,6 +3,8 @@ package extension.report.parser.html;
 import java.util.ArrayList;
 import java.util.List;
 
+import static extension.report.parser.html.script.CollapseSiblingsFunction.collapseSiblingsFunctionAsString;
+
 public class HtmlTemplateBuilder {
 
     private List<HtmlValue> elements = new ArrayList<>();
@@ -35,8 +37,16 @@ public class HtmlTemplateBuilder {
         sb.append("<head>");
         sb.append(String.format("<meta charset=\"%s\"/>", "UTF-8"));
         sb.append(String.format("<title>%s</title>", title));
+        sb.append("<style>");
+        sb.append(".active, .collapsible:hover {\n" +
+                "  background-color: #ccc;\n" +
+                "}\n"); //TODO: extract out... maybe change objects to only take class/id and have all css centralised here.
+        sb.append("</style>");
         sb.append("</head>");
         sb.append("<body style=\"margin:0px\">");
+        sb.append("<script>");
+        sb.append(collapseSiblingsFunctionAsString());
+        sb.append("</script>");
         sb.append("<div>");
 
         elements.forEach(element -> sb.append(element.asString()));

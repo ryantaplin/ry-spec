@@ -3,7 +3,8 @@ package extension.report.parser.html.css;
 public enum CssColour {
     BLUE("70e1e1"),
     WHITE("FFFFFF"),
-    BLACK("000000");
+    BLACK("444444"),
+    GREY("EEEEEE");
 
     private String hex;
 

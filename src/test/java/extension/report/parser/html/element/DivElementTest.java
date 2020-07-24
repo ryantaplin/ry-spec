@@ -28,6 +28,26 @@ class DivElementTest {
     }
 
     @Test
+    void asStringWithClassNameReturnsClassAttribute() {
+        DivElement div = div().withClassName("someClassName");
+        assertThat(div.asString()).isEqualTo("<div class=\"someClassName\"></div>");
+    }
+
+    @Test
+    void asStringWithOnClickFunctionReturnsOnClickAttribute() {
+        DivElement div = div().withOnClickFunction("someFunc()");
+        assertThat(div.asString()).isEqualTo("<div onClick=\"someFunc()\"></div>");
+    }
+
+    // TODO: this could be done better.. maybe a .withAttribute(AttributeType, AttributeValue) method
+    //  where -> AttributeType.CLASS_NAME + AtrributeType.ON_CLICK
+    @Test
+    void asStringAttributesAreSpaceSeparatedWhenMultipleAttributesAreSet() {
+        DivElement div = div().withClassName("someClassName").withOnClickFunction("someFunc()");
+        assertThat(div.asString()).isEqualTo("<div class=\"someClassName\" onClick=\"someFunc()\"></div>");
+    }
+
+    @Test
     void isNotEmptyReturnsFalseWhenContentListIsEmpty() {
         assertThat(div().isNotEmpty()).isFalse();
     }
@@ -64,5 +84,27 @@ class DivElementTest {
     void divElementsAreNotEqualWhenContainDifferentCssBuilderContent() {
         assertThat(div().with(css(fontSize(10))))
                 .isNotEqualTo(div().with(css(fontSize(99))));
+    }
+
+    @Test
+    void divElementsAreEqualWhenTheyHaveSameClassName() {
+        assertThat(div().withClassName("someClassName"))
+                .isEqualTo(div().withClassName("someClassName"));
+    }
+
+    @Test
+    void divElementsAreNotEqualWhenTheyHaveDifferentClassName() {
+        assertThat(div().withClassName("someClassName"))
+                .isNotEqualTo(div().withClassName("differentClassName"));
+    }
+
+    @Test
+    void divElementsAreEqualWhenTheyhaveSameOnClickFunctionValue() {
+        assertThat(div().withOnClickFunction("someFunc()")).isEqualTo(div().withOnClickFunction("someFunc()"));
+    }
+
+    @Test
+    void divElementsAreNotEqualWhenTheyHaveDifferentOnClickFunctionValue() {
+        assertThat(div().withOnClickFunction("someFunc()")).isNotEqualTo(div().withOnClickFunction("diffFunc()"));
     }
 }

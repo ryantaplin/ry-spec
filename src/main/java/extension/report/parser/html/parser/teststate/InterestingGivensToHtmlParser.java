@@ -23,7 +23,6 @@ public class InterestingGivensToHtmlParser {
     public HtmlElement parse(TestState testState) {
         return Optional.ofNullable(testState)
                 .map(TestState::getInterestingGivenEntries)
-                .filter(entries -> entries.size() > 0)
                 .flatMap(this::parseInterestingGivens)
                 .map(element -> element.with(cssHelper.capturedInterestingElementCss()))
                 .orElse(null);

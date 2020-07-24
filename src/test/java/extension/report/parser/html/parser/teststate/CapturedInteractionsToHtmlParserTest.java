@@ -31,7 +31,11 @@ class CapturedInteractionsToHtmlParserTest {
         assertThatHtml(result).isEqualTo(
                 div(
                         div(content("Captured Interactions")),
-                        div(div(content("sender to receiver = "), content("anyValue")))
+                        div(
+                                div(
+                                        div(content("sender to receiver")).withClassName("collapsible").withOnClickFunction("collapseSiblingsFunction(this)"),
+                                        div(content("anyValue")).withClassName("collapsible-content"))
+                        )
                 ));
     }
 
@@ -46,8 +50,13 @@ class CapturedInteractionsToHtmlParserTest {
                 div(
                         div(content("Captured Interactions")),
                         div(
-                                div(content("sender to receiver = "), content("anyValue")),
-                                div(content("anotherSender to anotherReceiver = "), content("anotherValue"))
+                                div(
+                                        div(content("sender to receiver")).withClassName("collapsible").withOnClickFunction("collapseSiblingsFunction(this)"),
+                                        div(content("anyValue")).withClassName("collapsible-content")),
+                                div(
+                                        div(content("anotherSender to anotherReceiver")).withClassName("collapsible").withOnClickFunction("collapseSiblingsFunction(this)"),
+                                        div(content("anotherValue")).withClassName("collapsible-content")
+                                )
                         )
                 ));
     }

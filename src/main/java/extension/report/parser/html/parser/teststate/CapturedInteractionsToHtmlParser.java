@@ -23,7 +23,6 @@ public class CapturedInteractionsToHtmlParser {
     public HtmlElement parse(TestState testState) {
         return Optional.ofNullable(testState)
                 .map(TestState::getCapturedInteractions)
-                .filter(interactions -> interactions.size() > 0)
                 .flatMap(this::parseCapturedInteractions)
 //                .map(element -> element.with(cssHelper.capturedInterestingElementCss()))
                 .orElse(null);
@@ -47,11 +46,12 @@ public class CapturedInteractionsToHtmlParser {
 
     private HtmlElement toKeyValuesMapping(CapturedInteraction capturedInteraction) {
         return div(
-                content(capturedInteraction.getInteractionParticipants() + " = "),
-                content(capturedInteraction.getInteractionValue()
-                        .map(Object::toString) //TODO: custom object parsing
-                        .orElse("")
-                )
+                div(content(capturedInteraction.getInteractionParticipants())).withClassName("collapsible").withOnClickFunction("collapseSiblingsFunction(this)").with(cssHelper.collapsibleButton()),
+                div(
+                        content(capturedInteraction.getInteractionValue()
+                                .map(Object::toString) //TODO: custom object parsing
+                                .orElse(""))
+                ).withClassName("collapsible-content").with(cssHelper.collapsibleContent())
         );
     }
 }

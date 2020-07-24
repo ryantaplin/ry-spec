@@ -10,7 +10,7 @@ class CssColourTest {
 
     @Test
     void blackHexValue() {
-        assertThat(BLACK.getHexValue()).isEqualTo("#000000");
+        assertThat(BLACK.getHexValue()).isEqualTo("#444444");
     }
 
     @Test
