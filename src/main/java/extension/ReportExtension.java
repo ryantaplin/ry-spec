@@ -1,6 +1,6 @@
 package extension;
 
-import extension.internal.extractor.AnnotationExtractor;
+import extension.internal.domain.TestSpecimen;
 import extension.internal.extractor.StateExtractor;
 import extension.internal.report.ReportFileWriter;
 import extension.internal.report.parser.HtmlResultGenerator;
@@ -10,12 +10,11 @@ import extension.internal.report.parser.helper.ForbiddenCharacterFilter;
 import extension.internal.report.parser.helper.SentenceFormatter;
 import extension.internal.report.parser.helper.SourceCodeParser;
 import extension.internal.report.parser.html.css.helper.TestContentCssHelper;
-import extension.internal.report.parser.html.parser.StringToHtmlHeaderParser;
 import extension.internal.report.parser.html.parser.SourceCodeToHtmlParser;
 import extension.internal.report.parser.html.parser.StateToHtmlParser;
+import extension.internal.report.parser.html.parser.StringToHtmlHeaderParser;
 import extension.internal.report.parser.html.parser.teststate.CapturedInteractionsToHtmlParser;
 import extension.internal.report.parser.html.parser.teststate.InterestingGivensToHtmlParser;
-import extension.internal.domain.TestSpecimen;
 import org.junit.jupiter.api.extension.*;
 
 import static extension.internal.domain.test.method.Result.FAILED;
@@ -43,12 +42,19 @@ final class ReportExtension implements Extension, BeforeAllCallback, AfterEachCa
             )
     );
 
+
+    //TODO: thinking to refactor the class ->
+    // beforeAll -> ClassDataGatherer.init(Class<?> testClass) returns ClassMethodDataMediator
+    //  |
+    // afterEach -> ClassMethodDataMediator.update(String methodName, TestState state, Result result) returns self
+    //  |
+    // afterAll ->  ClassMethodDataMediator.finialize() returns ClassDataResult
+    //                  |
+    //              ClassDataResultToHtmlWriter(ClassDataResult dataResult) void
     private TestSpecimen testSpecimen;
-    private ReportGenerator annotation;
 
     @Override
     public void beforeAll(ExtensionContext context) throws Exception {
-        this.annotation = context.getTestClass().map(AnnotationExtractor::getReportAnnotation).get();
         this.testSpecimen = context.getTestClass()
                 .map(TestSpecimen::initializeForClass)
                 .orElseThrow(() -> new Exception("TODO:"));
@@ -57,6 +63,7 @@ final class ReportExtension implements Extension, BeforeAllCallback, AfterEachCa
     @Override
     public void afterEach(ExtensionContext context) {
         String name = context.getDisplayName().split("\\(")[0];
+//        String annotations = context.getTestMethod().map(x -> x.getAnnotations())
         testSpecimen.updateTestMethodResult(name, context.getExecutionException().map(x -> FAILED).orElse(PASSED));
         context.getTestInstance()
                 .flatMap(StateExtractor::getOptionalTestStateFrom)

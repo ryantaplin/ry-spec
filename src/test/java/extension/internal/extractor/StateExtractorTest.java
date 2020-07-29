@@ -1,6 +1,6 @@
 package extension.internal.extractor;
 
-import extension.defaults.DefaultCapturedInteraction;
+import extension.CapturedInteraction;
 import extension.defaults.DefaultTestState;
 import extension.TestState;
 import org.junit.jupiter.api.Test;
@@ -89,7 +89,7 @@ class StateExtractorTest {
             }
 
             @Override
-            public List<DefaultCapturedInteraction> getCapturedInteractions() {
+            public List<CapturedInteraction> getCapturedInteractions() {
                 return null;
             }
         };
