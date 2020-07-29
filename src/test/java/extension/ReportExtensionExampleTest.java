@@ -1,6 +1,6 @@
 package extension;
 
-import extension.test.state.DefaultTestState;
+import extension.defaults.DefaultTestState;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

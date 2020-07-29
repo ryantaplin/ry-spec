@@ -1,6 +1,6 @@
 package helpers.assertions;
 
-import extension.report.parser.html.HtmlValue;
+import extension.internal.report.parser.html.HtmlValue;
 import org.assertj.core.api.ObjectAssert;
 
 import static java.lang.String.format;

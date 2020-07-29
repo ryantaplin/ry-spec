@@ -1,9 +1,8 @@
 package helpers.assertions;
 
-import extension.report.parser.html.css.CssElements;
-import extension.report.parser.html.css.CssElement;
+import extension.internal.report.parser.html.css.CssElements;
+import extension.internal.report.parser.html.css.CssElement;
 import org.assertj.core.api.ListAssert;
-import org.assertj.core.api.ObjectAssert;
 import org.junit.jupiter.api.Assertions;
 
 import java.lang.reflect.Field;
