@@ -9,7 +9,6 @@ import extension.internal.report.parser.helper.CamelCaseSplitter;
 import extension.internal.report.parser.helper.ForbiddenCharacterFilter;
 import extension.internal.report.parser.helper.SentenceFormatter;
 import extension.internal.report.parser.helper.SourceCodeParser;
-import extension.internal.report.parser.html.css.helper.TestContentCssHelper;
 import extension.internal.report.parser.html.parser.SourceCodeToHtmlParser;
 import extension.internal.report.parser.html.parser.StateToHtmlParser;
 import extension.internal.report.parser.html.parser.StringToHtmlHeaderParser;
@@ -25,19 +24,16 @@ final class ReportExtension implements Extension, BeforeAllCallback, AfterEachCa
     private final SentenceFormatter sentenceFormatter = new SentenceFormatter(new CamelCaseSplitter());
     private final SourceCodeParser sourceCodeParser = new SourceCodeParser(new ForbiddenCharacterFilter(), sentenceFormatter);
 
-    private final TestContentCssHelper testContentCssHelper = new TestContentCssHelper();
     private final ReportFileWriter reportToFileWriter = new ReportFileWriter(
             new HtmlResultGenerator(
                     sentenceFormatter,
                     new TestSpecimenToHtmlWorker(
-                            new StringToHtmlHeaderParser(sentenceFormatter, testContentCssHelper),
-                            new SourceCodeToHtmlParser(sourceCodeParser, testContentCssHelper),
+                            new StringToHtmlHeaderParser(sentenceFormatter),
+                            new SourceCodeToHtmlParser(sourceCodeParser),
                             new StateToHtmlParser(
-                                    new InterestingGivensToHtmlParser(testContentCssHelper),
-                                    new CapturedInteractionsToHtmlParser(testContentCssHelper),
-                                    testContentCssHelper
-                            ),
-                            testContentCssHelper
+                                    new InterestingGivensToHtmlParser(),
+                                    new CapturedInteractionsToHtmlParser()
+                            )
                     )
             )
     );

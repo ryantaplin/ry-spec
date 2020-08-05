@@ -1,6 +1,5 @@
 package extension.internal.report.parser.html.parser.teststate;
 
-import extension.internal.report.parser.html.css.helper.TestContentCssHelper;
 import extension.internal.report.parser.html.element.DivElement;
 import extension.internal.report.parser.html.element.HtmlElement;
 import extension.defaults.DefaultTestState;
@@ -19,8 +18,7 @@ import static org.mockito.Mockito.when;
 
 class InterestingGivensToHtmlParserTest {
 
-    private final TestContentCssHelper cssHelper = mock(TestContentCssHelper.class);
-    private final InterestingGivensToHtmlParser parser = new InterestingGivensToHtmlParser(cssHelper);
+    private final InterestingGivensToHtmlParser parser = new InterestingGivensToHtmlParser();
 
     private final TestState state = mock(TestState.class);
 
@@ -32,7 +30,7 @@ class InterestingGivensToHtmlParserTest {
                 div(
                         div(content("Interesting Givens")),
                         div(entryWithKeyAndValues("key: ", "value"))
-                ));
+                ).withClassName("interestingGivenContainer"));
     }
 
     @Test
@@ -43,8 +41,7 @@ class InterestingGivensToHtmlParserTest {
                 div(
                         div(content("Interesting Givens")),
                         div(entryWithKeyAndValues("key: ", "value", "anotherValue"))
-                )
-        );
+                ).withClassName("interestingGivenContainer"));
     }
 
     @Test
@@ -61,7 +58,7 @@ class InterestingGivensToHtmlParserTest {
                                 entryWithKeyAndValues("key0: ", "k0Avalue", "k0Bvalue"),
                                 entryWithKeyAndValues("key1: ", "k1Avalue", "k1Bvalue")
                         )
-                ));
+                ).withClassName("interestingGivenContainer"));
     }
 
     @Test

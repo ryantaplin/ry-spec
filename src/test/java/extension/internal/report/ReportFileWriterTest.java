@@ -24,7 +24,7 @@ public class ReportFileWriterTest {
 
     @BeforeEach
     void setUp() {
-        //TODO: cleanup incase residual is left from previous test runs
+        //TODO: cleanup incase residual reports are left from previous test runs
 
         final InternalPath testPath = mock(InternalPath.class);
         when(testPath.forReport()).thenReturn("stubbed/testClass.html");

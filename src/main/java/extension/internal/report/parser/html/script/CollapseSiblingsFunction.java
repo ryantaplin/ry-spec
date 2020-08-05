@@ -6,7 +6,7 @@ public class CollapseSiblingsFunction {
     */
     public static String collapseSiblingsFunctionAsString() {
         return "function collapseSiblingsFunction(event) {\n" +
-                "    var element = event.parentElement.getElementsByClassName(\"collapsible-content\")[0];\n" +
+                "    var element = event.parentElement.getElementsByClassName(\"collapsibleContent\")[0];\n" +
                 "    element.classList.toggle(\"active\");\n" +
                 "    if (element.style.display === \"block\") {\n" +
                 "        element.style.display = \"none\";\n" +

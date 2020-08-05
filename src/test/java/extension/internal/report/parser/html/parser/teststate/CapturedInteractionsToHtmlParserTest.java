@@ -1,6 +1,5 @@
 package extension.internal.report.parser.html.parser.teststate;
 
-import extension.internal.report.parser.html.css.helper.TestContentCssHelper;
 import extension.internal.report.parser.html.element.HtmlElement;
 import extension.defaults.DefaultCapturedInteraction;
 import extension.defaults.DefaultTestState;
@@ -18,11 +17,9 @@ import static org.mockito.Mockito.when;
 
 class CapturedInteractionsToHtmlParserTest {
 
-    private final TestContentCssHelper cssHelper = mock(TestContentCssHelper.class);
-    private final CapturedInteractionsToHtmlParser capturedInteractionsParser = new CapturedInteractionsToHtmlParser(cssHelper);
-
     private final TestState state = mock(TestState.class);
 
+    private final CapturedInteractionsToHtmlParser capturedInteractionsParser = new CapturedInteractionsToHtmlParser();
 
     @Test
     void returnsDivElementWithCapturedInteraction() {
@@ -30,13 +27,13 @@ class CapturedInteractionsToHtmlParserTest {
         HtmlElement result = capturedInteractionsParser.parse(state);
         assertThatHtml(result).isEqualTo(
                 div(
-                        div(content("Captured Interactions")),
+                        div(content("Captured Interactions")).withClassName("capturedInteractionsHeader"),
                         div(
                                 div(
                                         div(content("sender to receiver")).withClassName("collapsible").withOnClickFunction("collapseSiblingsFunction(this)"),
-                                        div(content("anyValue")).withClassName("collapsible-content"))
+                                        div(content("anyValue")).withClassName("collapsibleContent"))
                         )
-                ));
+                ).withClassName("capturedInteractionsContainer"));
     }
 
     @Test
@@ -48,17 +45,17 @@ class CapturedInteractionsToHtmlParserTest {
         HtmlElement result = capturedInteractionsParser.parse(state);
         assertThatHtml(result).isEqualTo(
                 div(
-                        div(content("Captured Interactions")),
+                        div(content("Captured Interactions")).withClassName("capturedInteractionsHeader"),
                         div(
                                 div(
                                         div(content("sender to receiver")).withClassName("collapsible").withOnClickFunction("collapseSiblingsFunction(this)"),
-                                        div(content("anyValue")).withClassName("collapsible-content")),
+                                        div(content("anyValue")).withClassName("collapsibleContent")),
                                 div(
                                         div(content("anotherSender to anotherReceiver")).withClassName("collapsible").withOnClickFunction("collapseSiblingsFunction(this)"),
-                                        div(content("anotherValue")).withClassName("collapsible-content")
+                                        div(content("anotherValue")).withClassName("collapsibleContent")
                                 )
                         )
-                ));
+                ).withClassName("capturedInteractionsContainer"));
     }
 
     @Test

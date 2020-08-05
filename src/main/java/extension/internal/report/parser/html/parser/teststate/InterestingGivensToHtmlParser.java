@@ -1,8 +1,7 @@
 package extension.internal.report.parser.html.parser.teststate;
 
-import extension.internal.report.parser.html.css.helper.TestContentCssHelper;
-import extension.internal.report.parser.html.element.HtmlElement;
 import extension.TestState;
+import extension.internal.report.parser.html.element.HtmlElement;
 
 import java.util.List;
 import java.util.Map;
@@ -14,17 +13,11 @@ import static extension.internal.report.parser.html.element.DivElement.div;
 
 public class InterestingGivensToHtmlParser {
 
-    private final TestContentCssHelper cssHelper;
-
-    public InterestingGivensToHtmlParser(TestContentCssHelper cssHelper) {
-        this.cssHelper = cssHelper;
-    }
-
     public HtmlElement parse(TestState testState) {
         return Optional.ofNullable(testState)
                 .map(TestState::getInterestingGivenEntries)
                 .flatMap(this::parseInterestingGivens)
-                .map(element -> element.with(cssHelper.capturedInterestingElementCss()))
+                .map(element -> element.withClassName("interestingGivenContainer"))
                 .orElse(null);
 
     }
@@ -39,7 +32,7 @@ public class InterestingGivensToHtmlParser {
                     div(
                             div(content("Interesting Givens")),
                             div(interestingGivensAsHtml)
-                    ).with(cssHelper.capturedInterestingElementCss())
+                    )
             );
         }
         return Optional.empty();

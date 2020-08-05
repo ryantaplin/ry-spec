@@ -1,7 +1,6 @@
 package extension.internal.report.parser;
 
 import extension.internal.report.parser.html.HtmlValue;
-import extension.internal.report.parser.html.css.helper.TestContentCssHelper;
 import extension.internal.report.parser.html.element.DivElement;
 import extension.internal.report.parser.html.parser.StringToHtmlHeaderParser;
 import extension.internal.report.parser.html.parser.SourceCodeToHtmlParser;
@@ -15,20 +14,16 @@ import static extension.internal.report.parser.html.element.DivElement.div;
 
 public class TestSpecimenToHtmlWorker {
 
-    private final TestContentCssHelper cssHelper;
-
     private final StateToHtmlParser stateParser;
     private final StringToHtmlHeaderParser headerParser;
     private final SourceCodeToHtmlParser sourceCodeParser;
 
     public TestSpecimenToHtmlWorker(StringToHtmlHeaderParser headerParser,
                                     SourceCodeToHtmlParser sourceCodeParser,
-                                    StateToHtmlParser stateParser,
-                                    TestContentCssHelper cssHelper) {
+                                    StateToHtmlParser stateParser) {
         this.headerParser = headerParser;
         this.sourceCodeParser = sourceCodeParser;
         this.stateParser = stateParser;
-        this.cssHelper = cssHelper;
     }
 
     public List<HtmlValue> parse(List<MethodData> methodData) {
@@ -42,6 +37,6 @@ public class TestSpecimenToHtmlWorker {
                 headerParser.parse(data.getName(), data.getResult()),
                 sourceCodeParser.parse(data.getSourceCode()),
                 stateParser.parse(data.getOptionalState().orElse(null))
-        ).with(cssHelper.containerCss());
+        ).withClassName("container");
     }
 }

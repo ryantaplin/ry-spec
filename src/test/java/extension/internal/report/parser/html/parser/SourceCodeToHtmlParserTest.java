@@ -2,7 +2,6 @@ package extension.internal.report.parser.html.parser;
 
 import extension.internal.report.parser.helper.SourceCodeParser;
 import extension.internal.report.parser.html.HtmlValue;
-import extension.internal.report.parser.html.css.helper.TestContentCssHelper;
 import extension.internal.domain.test.method.MethodSourceCode;
 import org.junit.jupiter.api.Test;
 
@@ -15,11 +14,7 @@ import static org.mockito.Mockito.when;
 class SourceCodeToHtmlParserTest {
 
     private final SourceCodeParser sourceCodeParser = mock(SourceCodeParser.class);
-    private final TestContentCssHelper cssHelper = mock(TestContentCssHelper.class);
-    SourceCodeToHtmlParser sourceCodeToHtmlParser = new SourceCodeToHtmlParser(
-            sourceCodeParser,
-            cssHelper
-    );
+    private final SourceCodeToHtmlParser sourceCodeToHtmlParser = new SourceCodeToHtmlParser(sourceCodeParser);
 
     public static final String A_STRING = "someValue";
     public static final MethodSourceCode METHOD_SOURCE_CODE = new MethodSourceCode(A_STRING);
@@ -29,6 +24,6 @@ class SourceCodeToHtmlParserTest {
         when(sourceCodeParser.format(METHOD_SOURCE_CODE)).thenReturn(A_STRING);
 
         HtmlValue parse = sourceCodeToHtmlParser.parse(METHOD_SOURCE_CODE);
-        assertThatHtml(parse).isEqualTo(div(content(A_STRING)));
+        assertThatHtml(parse).isEqualTo(div(content(A_STRING)).withClassName("sourceCode"));
     }
 }

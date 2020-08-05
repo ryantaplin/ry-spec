@@ -3,8 +3,6 @@ package extension.internal.report.parser.html.element;
 import org.junit.jupiter.api.Test;
 
 import static extension.internal.report.parser.html.HtmlContent.content;
-import static extension.internal.report.parser.html.css.CssElements.css;
-import static extension.internal.report.parser.html.css.CssFontSize.fontSize;
 import static extension.internal.report.parser.html.element.DivElement.div;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -72,18 +70,6 @@ class DivElementTest {
     void divElementsAreNotEqualWhenContainDifferentElementContent() {
         assertThat(div(content("someContent")))
                 .isNotEqualTo(div(content("differentContent")));
-    }
-
-    @Test
-    void divElementsAreEqualWhenContainSameCssBuilderContent() {
-        assertThat(div().with(css(fontSize(10))))
-                .isEqualTo(div().with(css(fontSize(10))));
-    }
-
-    @Test
-    void divElementsAreNotEqualWhenContainDifferentCssBuilderContent() {
-        assertThat(div().with(css(fontSize(10))))
-                .isNotEqualTo(div().with(css(fontSize(99))));
     }
 
     @Test

@@ -1,6 +1,5 @@
 package extension.internal.report.parser.html.parser;
 
-import extension.internal.report.parser.html.css.helper.TestContentCssHelper;
 import extension.internal.report.parser.html.element.HtmlElement;
 import extension.internal.report.parser.html.parser.teststate.CapturedInteractionsToHtmlParser;
 import extension.internal.report.parser.html.parser.teststate.InterestingGivensToHtmlParser;
@@ -15,10 +14,9 @@ import static org.mockito.Mockito.when;
 
 class StateToHtmlParserTest {
 
-    private final TestContentCssHelper cssHelper = mock(TestContentCssHelper.class);
     private final InterestingGivensToHtmlParser interestingGivensParser = mock(InterestingGivensToHtmlParser.class);
     private final CapturedInteractionsToHtmlParser capturedInteractionsParser = mock(CapturedInteractionsToHtmlParser.class);
-    private final StateToHtmlParser stateToHtmlParser = new StateToHtmlParser(interestingGivensParser, capturedInteractionsParser, cssHelper);
+    private final StateToHtmlParser stateToHtmlParser = new StateToHtmlParser(interestingGivensParser, capturedInteractionsParser);
 
     private final TestState state = mock(TestState.class);
 
@@ -52,6 +50,6 @@ class StateToHtmlParserTest {
     @Test
     void returnsEmptyDivWhenNullStateIsProvided() {
         HtmlElement result = stateToHtmlParser.parse(null);
-        assertThatHtml(result).isEqualTo(div());
+        assertThatHtml(result).isEqualTo(div().withClassName("emptyDiv"));
     }
 }

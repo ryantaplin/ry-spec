@@ -1,8 +1,6 @@
 package extension.internal.report.parser;
 
 import extension.internal.report.parser.html.HtmlValue;
-import extension.internal.report.parser.html.css.CssElements;
-import extension.internal.report.parser.html.css.helper.TestContentCssHelper;
 import extension.internal.report.parser.html.parser.StringToHtmlHeaderParser;
 import extension.internal.report.parser.html.parser.SourceCodeToHtmlParser;
 import extension.internal.report.parser.html.parser.StateToHtmlParser;
@@ -16,7 +14,6 @@ import java.util.Collections;
 import java.util.List;
 
 import static extension.internal.report.parser.html.HtmlContent.content;
-import static extension.internal.report.parser.html.css.CssFontSize.fontSize;
 import static extension.internal.report.parser.html.element.DivElement.div;
 import static extension.internal.domain.test.method.MethodData.testMethodData;
 import static helpers.assertions.HtmlListAssertions.assertThatHtml;
@@ -30,13 +27,11 @@ class TestSpecimenToHtmlWorkerTest {
     private final StringToHtmlHeaderParser stringToHtmlHeaderParser = mock(StringToHtmlHeaderParser.class);
     private final SourceCodeToHtmlParser sourceCodeToHtmlParser = mock(SourceCodeToHtmlParser.class);
 
-    private final TestContentCssHelper testContentCssHelper = mock(TestContentCssHelper.class);
 
     private final TestSpecimenToHtmlWorker parser = new TestSpecimenToHtmlWorker(
             stringToHtmlHeaderParser,
             sourceCodeToHtmlParser,
-            stateToHtmlParser,
-            testContentCssHelper
+            stateToHtmlParser
     );
 
     private TestState testState = mock(TestState.class);
@@ -89,16 +84,9 @@ class TestSpecimenToHtmlWorkerTest {
         List<HtmlValue> parse = parser.parse(List.of(METHOD_DATA, METHOD_DATA));
 
         assertThatHtml(parse).containsExactly(
-                div(div(content("header")), div(content("source code")), div()),
-                div(div(content("header")), div(content("source code")), div())
+                div(div(content("header")), div(content("source code")), div()).withClassName("container"),
+                div(div(content("header")), div(content("source code")), div()).withClassName("container")
         );
-    }
-
-    @Test
-    void parserAppliesCssStylingToTopLevelElement() {
-        when(testContentCssHelper.containerCss()).thenReturn(CssElements.css(fontSize(10)));
-        List<HtmlValue> parse = parser.parse(List.of(METHOD_DATA));
-        assertThat(parse.get(0).asString()).contains("style=");
     }
 
     private MethodData testMethodDataWithSomePopulatedState() {

@@ -2,19 +2,12 @@ package extension.internal.report.parser;
 
 import extension.ResultGenerator;
 import extension.internal.report.parser.helper.SentenceFormatter;
-import extension.internal.report.parser.html.css.CssElements;
-import extension.internal.report.parser.html.css.CssPosition;
 import extension.internal.report.parser.html.element.DivElement;
 import extension.internal.domain.TestSpecimen;
 
 import static extension.internal.report.parser.html.HtmlContent.content;
 import static extension.internal.report.parser.html.HtmlTemplateBuilder.htmlTemplate;
-import static extension.internal.report.parser.html.css.CssBackgroundColour.backgroundColour;
-import static extension.internal.report.parser.html.css.CssBorder.border;
-import static extension.internal.report.parser.html.css.CssColour.BLUE;
-import static extension.internal.report.parser.html.css.CssElements.css;
-import static extension.internal.report.parser.html.css.CssFontSize.fontSize;
-import static extension.internal.report.parser.html.css.CssMargin.margin;
+import static extension.internal.report.parser.html.css.attribute.CssBorder.border;
 import static extension.internal.report.parser.html.element.DivElement.div;
 
 public class HtmlResultGenerator implements ResultGenerator {
@@ -37,17 +30,7 @@ public class HtmlResultGenerator implements ResultGenerator {
     }
 
     private DivElement titleDiv(String pageTitle) {
-        return div(div(content(pageTitle))).with(pageTitleCss());
-    }
-
-    //TODO: create a reportCssHelper?
-    private CssElements pageTitleCss() {
-        return css(
-                margin(0, 2, 0, 2),
-                border(1, CssPosition.BOTTOM),
-                backgroundColour(BLUE),
-                fontSize(24)
-        );
+        return div(div(content(pageTitle))).withClassName("pageTitle");
     }
 
     private String formatPageTitle(String title) {
