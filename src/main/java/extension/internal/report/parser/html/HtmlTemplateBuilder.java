@@ -12,13 +12,18 @@ import static extension.internal.report.parser.html.css.CssClassBuilder.cssClass
 import static extension.internal.report.parser.html.css.HtmlTemplateCssBuilder.cssBuilder;
 import static extension.internal.report.parser.html.css.attribute.CssBackgroundColour.backgroundColour;
 import static extension.internal.report.parser.html.css.attribute.CssBorder.border;
+import static extension.internal.report.parser.html.css.attribute.CssBorderCollapse.borderCollapse;
+import static extension.internal.report.parser.html.css.attribute.CssBorderCollapseType.COLLAPSE;
 import static extension.internal.report.parser.html.css.attribute.CssFontColour.fontColour;
 import static extension.internal.report.parser.html.css.attribute.CssFontSize.fontSize;
+import static extension.internal.report.parser.html.css.attribute.CssFontWeight.fontWeight;
+import static extension.internal.report.parser.html.css.attribute.CssFontWeightType.BOLD;
 import static extension.internal.report.parser.html.css.attribute.CssHoverCursor.hoverCursor;
 import static extension.internal.report.parser.html.css.attribute.CssMargin.margin;
 import static extension.internal.report.parser.html.css.attribute.CssOverflowType.HIDDEN;
 import static extension.internal.report.parser.html.css.attribute.CssPadding.padding;
 import static extension.internal.report.parser.html.css.attribute.CssUserSelectDisabled.*;
+import static extension.internal.report.parser.html.css.attribute.CssWidth.width;
 import static extension.internal.report.parser.html.css.attribute.value.CssColour.*;
 import static extension.internal.report.parser.html.css.attribute.value.CssCursorType.POINTER;
 import static extension.internal.report.parser.html.css.attribute.value.CssDisplayType.NONE;
@@ -65,11 +70,17 @@ public class HtmlTemplateBuilder {
                                 .withAttribute(border(1))
                                 .withAttribute(margin(0, 10, 10, 10)))
                         .addCss(cssClass("capturedInteractionsHeader")
-                        .withAttribute(margin(5, 5, 2, 5)))
+                                .withAttribute(border(1))
+                                .withAttribute(fontWeight(BOLD))
+                                .withAttribute(padding(5, 5, 5, 5)))
+                        .addCss(cssClass("interestingGivensHeader")
+                                .withAttribute(border(1))
+                                .withAttribute(fontWeight(BOLD))
+                                .withAttribute(padding(5, 5, 5, 5)))
                         .addCss(cssClass("interestingGivenContainer")
                                 .withAttribute(border(1))
-                                .withAttribute(margin(0, 10, 10, 10))
-                                .withAttribute(padding(2, 2, 2, 2)))
+                                .withAttribute(margin(0, 10, 10, 10)))
+//                                .withAttribute(padding(2, 2, 2, 2)))
                         .addCss(cssClass("collapsibleContent")
                                 .withAttribute(padding(0, 18, 0, 18))
                                 .withAttribute(CssDisplay.display(NONE))
@@ -104,6 +115,17 @@ public class HtmlTemplateBuilder {
                         .addCss(cssClass("container")
                                 .withAttribute(margin(5, 5, 5, 5))
                                 .withAttribute(border(1)))
+                        .addCss(cssClass("tableEntity")
+                                .withAttribute(padding(3, 3, 3, 3))
+                                .withAttribute(border(1))
+                                .withAttribute(width("100%"))
+                                .withAttribute(borderCollapse(COLLAPSE)))
+                        .addCss(cssClass("tableHeaderEntity")
+                                .withAttribute(width("auto"))
+                                .withAttribute(fontWeight(BOLD)))
+                        .addCss(cssClass("tableValueEntity")
+                                .withAttribute(width("100%"))
+                        )
 
                         .build()
         );

@@ -1,9 +1,9 @@
 package extension.internal.report.parser.html.parser.teststate;
 
+import extension.TestState;
+import extension.defaults.DefaultTestState;
 import extension.internal.report.parser.html.element.DivElement;
 import extension.internal.report.parser.html.element.HtmlElement;
-import extension.defaults.DefaultTestState;
-import extension.TestState;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -11,6 +11,9 @@ import java.util.Map;
 
 import static extension.internal.report.parser.html.HtmlContent.content;
 import static extension.internal.report.parser.html.element.DivElement.div;
+import static extension.internal.report.parser.html.element.TableElement.table;
+import static extension.internal.report.parser.html.element.TableRow.row;
+import static extension.internal.report.parser.html.element.TableRowData.rowData;
 import static helpers.assertions.HtmlAssertions.assertThatHtml;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
@@ -28,8 +31,13 @@ class InterestingGivensToHtmlParserTest {
         HtmlElement result = parser.parse(state);
         assertThatHtml(result).isEqualTo(
                 div(
-                        div(content("Interesting Givens")),
-                        div(entryWithKeyAndValues("key: ", "value"))
+                        div(content("Interesting Givens")).withClassName("interestingGivensHeader"),
+                        table(
+                                row(
+                                        rowData("key").withClassNames("tableEntity", "tableHeaderEntity"),
+                                        rowData("value").withClassNames("tableEntity", "tableValueEntity")
+                                ).withClassName("tableEntity")
+                        ).withClassName("tableEntity")
                 ).withClassName("interestingGivenContainer"));
     }
 
@@ -39,8 +47,13 @@ class InterestingGivensToHtmlParserTest {
         HtmlElement result = parser.parse(state);
         assertThatHtml(result).isEqualTo(
                 div(
-                        div(content("Interesting Givens")),
-                        div(entryWithKeyAndValues("key: ", "value", "anotherValue"))
+                        div(content("Interesting Givens")).withClassName("interestingGivensHeader"),
+                        table(
+                                row(
+                                        rowData("key").withClassNames("tableEntity", "tableHeaderEntity"),
+                                        rowData("[value, anotherValue]").withClassNames("tableEntity", "tableValueEntity")
+                                ).withClassName("tableEntity")
+                        ).withClassName("tableEntity")
                 ).withClassName("interestingGivenContainer"));
     }
 
@@ -53,11 +66,17 @@ class InterestingGivensToHtmlParserTest {
         HtmlElement result = parser.parse(state);
         assertThatHtml(result).isEqualTo(
                 div(
-                        div(content("Interesting Givens")),
-                        div(
-                                entryWithKeyAndValues("key0: ", "k0Avalue", "k0Bvalue"),
-                                entryWithKeyAndValues("key1: ", "k1Avalue", "k1Bvalue")
-                        )
+                        div(content("Interesting Givens")).withClassName("interestingGivensHeader"),
+                        table(
+                                row(
+                                        rowData("key0").withClassNames("tableEntity", "tableHeaderEntity"),
+                                        rowData("[k0Avalue, k0Bvalue]").withClassNames("tableEntity", "tableValueEntity")
+                                ).withClassName("tableEntity"),
+                                row(
+                                        rowData("key1").withClassNames("tableEntity", "tableHeaderEntity"),
+                                        rowData("[k1Avalue, k1Bvalue]").withClassNames("tableEntity", "tableValueEntity")
+                                ).withClassName("tableEntity")
+                        ).withClassName("tableEntity")
                 ).withClassName("interestingGivenContainer"));
     }
 
@@ -71,10 +90,6 @@ class InterestingGivensToHtmlParserTest {
     void returnsNullWhenStateHasNoInterestingGivens() {
         HtmlElement result = parser.parse(new DefaultTestState());
         assertThat(result).isNull();
-    }
-
-    private DivElement entryWithKeyAndValues(String key, String... values) {
-        return div(content(key), content(String.join(", ", values)));
     }
 
     private static Map.Entry<String, List<Object>> entry(String key, List<Object> value) {

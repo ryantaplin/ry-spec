@@ -22,13 +22,15 @@ public class ReportExtensionExampleTest extends AcceptanceTest {
         Assertions.fail();
     }
 
-    @Test
+    @Test //care about the order of interesting givens?
     void somethingPass() {
-        givenWeOwnA(EMPTY_FARM);
+        givenWeHaveAFarmer("Fred"); //weird output -> " fred"
+        andWeOwnA(EMPTY_FARM);
 
         whenWeDoSomething(likeAdd(CHICKEN));
         andSomethingElse(likeAdd(RABBIT));
         andSomethingElse(likeAdd(PIG));
+
 
         assertThat(FARM)
                 .contains(CHICKEN)
@@ -36,10 +38,14 @@ public class ReportExtensionExampleTest extends AcceptanceTest {
                 .contains(PIG);
     }
 
+    private void givenWeHaveAFarmer(String name) {
+        this.testState.addInterestingGiven("Farmers", name);
+    }
+
     private List<String> EMPTY_FARM = new ArrayList<>();
     private List<String> FARM = new ArrayList<>();
 
-    private void givenWeOwnA(List<String> x) {
+    private void andWeOwnA(List<String> x) {
         this.FARM = this.EMPTY_FARM;
     }
 
